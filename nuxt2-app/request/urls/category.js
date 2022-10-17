@@ -1,3 +1,3 @@
 export default {
-  list: '/category',
+  list: 'api/v1/category',
 }
