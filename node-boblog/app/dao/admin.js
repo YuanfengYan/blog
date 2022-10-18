@@ -24,23 +24,20 @@
       console.log('hasAdmin',hasAdmin)
      }
  
-     const admin = new Admin();
-     admin.nickname = nickname
-     admin.email = email
-     admin.password = password
- 
-     try {
-       const res = await admin.save();
- 
-       const data = {
-         email: res.email,
-         nickname: res.nickname
-       }
- 
-       return [null, data]
+    //  const admin = new Admin();
+    //  admin.nickname = nickname
+    //  admin.email = email
+    //  admin.password = password
+    try {
+      const res = await Admin.create({ nickname,email,password})
+      const data = {
+        email: res.email,
+        nickname: res.nickname
+      }
+      return [null, data]
      } catch (err) {
-       return [err, null]
-     }
+      return [err, null]
+    }
    }
  
    // 验证密码

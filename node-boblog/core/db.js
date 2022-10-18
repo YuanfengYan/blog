@@ -43,6 +43,7 @@ const sequelize = new Sequelize(dbName, user, password, {
 // 创建模型
 sequelize.sync({ force: false })
 
+// 连接测试
 sequelize.authenticate().then(res => {
   console.log('Connection has been established successfully.');
 }).catch(err => {

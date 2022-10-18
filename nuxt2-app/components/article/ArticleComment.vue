@@ -465,13 +465,13 @@ export default {
   background: #f8f8f8;
 }
 
->>> .el-dialog__header {
+::v-deep .el-dialog__header {
   padding: 0;
 }
->>> .el-dialog__body {
+::v-deep .el-dialog__body {
   padding: 0;
 }
->>> .el-dialog {
+::v-deep .el-dialog {
   margin: 0;
   position: absolute;
   left: 50%;
