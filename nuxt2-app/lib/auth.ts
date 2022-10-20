@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 import { Base64 } from 'js-base64'
-const BOBLOG_TOKEN = process.env.BOBLOG_TOKEN as string
+const  BLOG_TOKEN = process.env.BLOG_TOKEN as string
 
 export function encodeToken() {
   const token = getToken()
@@ -9,13 +9,13 @@ export function encodeToken() {
 }
 
 export function getToken() {
-  return Cookies.get(BOBLOG_TOKEN)
+  return Cookies.get( BLOG_TOKEN)
 }
 
 export function setToken(token:string) {
-  return Cookies.set(BOBLOG_TOKEN, token)
+  return Cookies.set( BLOG_TOKEN, token)
 }
 
 export function removeToken() {
-  return Cookies.remove(BOBLOG_TOKEN)
+  return Cookies.remove( BLOG_TOKEN)
 }

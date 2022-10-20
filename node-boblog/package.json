@@ -12,6 +12,7 @@
   "dependencies": {
     "@koa/cors": "^3.4.1",
     "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-ratelimit": "^5.0.1",

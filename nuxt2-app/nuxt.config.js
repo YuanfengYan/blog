@@ -57,6 +57,10 @@ export default {
   //     }
   //   }
   // },
+  // server: {
+  //   port: 3000, // 默认: 3000
+  //   host: 'localhost' // 默认: localhost,
+  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

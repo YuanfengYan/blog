@@ -3,7 +3,8 @@ import { removeToken, encodeToken } from "@/lib/auth";
 
 export default ({ $axios, store }) => {
   $axios.onRequest(config => {
-    config.baseURL = 'http://47.99.103.174:5000/'//process.env.BASE_URL
+    console.log('process.env.BASE_URL',process.env.BASE_URL)
+    config.baseURL = process.env.BASE_URL
     config.headers.Authorization = encodeToken()
     return config
   })
@@ -20,7 +21,6 @@ export default ({ $axios, store }) => {
 
   $axios.onError(err => {
     const { response } = err
-    console.log('config122',err)
     // 处理token过期无效情况，清除token，初始化store数据
     if ([401, 403].includes(response.status)) {
       removeToken()

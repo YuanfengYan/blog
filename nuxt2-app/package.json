@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --hostname localhost --port 3000",
+    "dev2": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate"
@@ -19,11 +20,7 @@
     "js-cookie": "^3.0.1",
     "nuxt": "^2.15.8",
     "sass": "^1.55.0",
-    "sass-loader": "10",
-    "vue": "2.7.11",
-    "vue-server-renderer": "^2.7.10",
-    "vue-template-compiler": "2.7.11",
-    "vuex": "3.6.2"
+    "sass-loader": "10"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.8",
