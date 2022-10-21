@@ -2,9 +2,12 @@ import Vue from 'vue'
 import { removeToken, encodeToken } from "@/lib/auth";
 
 export default ({ $axios, store }) => {
+  // config.default.baseURL
+  $axios.defaults.baseURL = process.env.BASE_URL
   $axios.onRequest(config => {
-    console.log('process.env.BASE_URL',process.env.BASE_URL)
-    config.baseURL = process.env.BASE_URL
+    console.log('process.env.BASE_URL',config)
+    // config.baseURL = process.env.BASE_URL
+     config.baseURL ='http://192.168.10.238:5000/'
     config.headers.Authorization = encodeToken()
     return config
   })

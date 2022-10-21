@@ -188,6 +188,8 @@ export default {
       if (!err) {
         this.onSuccess();
         this.$message.success("评论成功，审核通过后展示！");
+      } else {
+        console.log(err);
       }
     },
     // 评论|回复成功

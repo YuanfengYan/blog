@@ -1,9 +1,9 @@
 const Router = require('koa-router');
 
-// const {
-//   ArticleValidator,
-//   PositiveIdParamsValidator
-// } = require('@validators/article');
+const {
+  ArticleValidator,
+  PositiveIdParamsValidator
+} = require('@validators/article');
 
 const { Auth } = require('@middlewares/auth');
 const { ArticleDao } = require('@dao/article');
@@ -45,7 +45,7 @@ const router = new Router({
 router.post('/article', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
-  // const v = await new ArticleValidator().validate(ctx);
+  const v = await new ArticleValidator().validate(ctx);
 
   // 创建文章
   const [err, data] = await ArticleDao.create(v);
@@ -64,7 +64,7 @@ router.post('/article', new Auth(AUTH_ADMIN).m, async (ctx) => {
 router.delete('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
-  // const v = await new PositiveIdParamsValidator().validate(ctx);
+  const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取文章ID参数
   const id = v.get('path.id');
@@ -83,7 +83,7 @@ router.delete('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
  */
 router.put('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
-  // const v = await new PositiveIdParamsValidator().validate(ctx);
+  const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取文章ID参数
   const id = v.get('path.id');
@@ -104,7 +104,6 @@ router.put('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 router.get('/article', async (ctx) => {
   // 尝试获文章取缓存
   const { category_id = 0, page = 1 } = ctx.query;
-
   // 没有缓存，则读取数据库
   const [err, data] = await ArticleDao.list(ctx.query);
   if (!err) {
@@ -121,7 +120,7 @@ router.get('/article', async (ctx) => {
 router.get('/article/:id', async (ctx) => {
 
   // 通过验证器校验参数是否通过
-  // const v = await new PositiveIdParamsValidator().validate(ctx);
+  const v = await new PositiveIdParamsValidator().validate(ctx);
   // 获取文章ID参数
   const id = v.get('path.id');
   // 查询文章

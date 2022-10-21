@@ -1,4 +1,4 @@
-const basicAuth = require('basic-auth')
+const basicAuth = require('basic-auth') //自动解析header中authorization的值
 const jwt = require('jsonwebtoken')
 
 class Auth {
@@ -9,15 +9,21 @@ class Auth {
     Auth.ADMIN = 16;
     Auth.SPUSER_ADMIN = 32;
   }
-
+  getAuthorization(ctx){
+    console.log('ctx',ctx);  //结果
+    let auth = ctx.request.header.authorization;    //http header的值
+    auth = auth.split(' ')[1];  //有"basic "的前缀，用split分割空格取值
+    auth = Buffer.from(auth, 'base64').toString().split(':')[0];    //解析base64，转化为字符串，而且他有一个“:”的符号，需要分割
+    console.log(auth);  //结果
+    return auth
+  }
   get m() {
     // token 检测
     // token 开发者 传递令牌
     // token body header
     // HTTP 规定 身份验证机制 HttpBasicAuth
     return async (ctx, next) => {
-      const tokenToken = basicAuth(ctx.req);
-
+      const tokenToken = basicAuth(ctx);
       let errMsg = "无效的token";
       // 无带token
       if (!tokenToken || !tokenToken.name) {

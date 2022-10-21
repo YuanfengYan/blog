@@ -1,3 +1,3 @@
 export default {
-  create: '/reply'
+  create: 'api/v1/reply'
 }

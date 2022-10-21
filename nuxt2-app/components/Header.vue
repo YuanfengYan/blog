@@ -12,10 +12,11 @@
               'nav-item-active': navIndex === index,
             },
           ]"
+          @click="jumpURL(item.router)"
         >
           {{ item.title }}
         </div>
-        <div v-if="Array.isArray(categoryList) && categoryList.length">
+        <!-- <div v-if="Array.isArray(categoryList) && categoryList.length">
           <el-dropdown>
             <span class="el-dropdown-link">
               分类<i class="el-icon-arrow-down el-icon--right"></i>
@@ -28,7 +29,7 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </div>
+        </div> -->
       </div>
       <div class="search">
         <el-input
@@ -50,20 +51,15 @@ import { mapState } from "vuex";
 // import { getCategory } from "@/request/api/category";
 export default {
   name: "VHeader",
-  props: {
-    isCategory: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  props: {},
   data() {
     return {
       keyword: "",
       navIndex: 0,
       nav: [
         {
-          title: "首页",
-          router: "/",
+          title: "博客",
+          router: "/blog",
         },
       ],
     };
@@ -84,19 +80,19 @@ export default {
   },
   mounted() {
     this.handleNav();
-    this.getCategory();
+    // this.getCategory();
   },
   methods: {
-    getCategory() {
-      this.$store.dispatch("category/getCategoryData");
-    },
+    // getCategory() {
+    //   this.$store.dispatch("category/getCategoryData");
+    // },
     onSearch() {
       if (!this.keyword) return false;
       window.location.href = `/?keyword=${this.keyword}`;
     },
     handleNav() {
       if (this.isLoginStatus) {
-        this.nav.splice(2, 0, {
+        this.nav.splice(1, 0, {
           title: "个人中心",
           router: "/usercenter",
         });
@@ -107,11 +103,11 @@ export default {
         }
       }
     },
-    // 返回首页
-    goHome() {
-      window.location.href = "/";
-    },
-    // 跳转URL
+    // // 返回首页
+    // goHome() {
+    //   window.location.href = "/";
+    // },
+    // // 跳转URL
     jumpURL(router) {
       const { category_id, keyword } = this.$route.query;
       if (category_id || keyword) {

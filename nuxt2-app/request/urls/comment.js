@@ -1,5 +1,5 @@
 
 export default {
-  create: '/comment',
-  target: '/comment/target/list',
+  create: 'api/v1/comment',
+  target: 'api/v1/comment/target/list',
 }
