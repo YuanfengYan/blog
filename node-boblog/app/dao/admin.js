@@ -83,8 +83,10 @@
        if (!admin) {
          throw new global.errs.AuthFailed('账号不存在或者密码不正确')
        }
+      //  todo 权限问题
+       Object.assign(admin.dataValues,{permissions:['admin', 'editor']})
  
-       return [null, admin]
+       return [null,  admin]
      } catch (err) {
        return [err, null]
      }

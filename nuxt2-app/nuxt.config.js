@@ -66,5 +66,8 @@ export default {
   build: {
     transpile: [/^element-ui/],
   },
+  publicRuntimeConfig:{
+    BASE_URL: process.env.BASE_URL,
+  }
 
 }

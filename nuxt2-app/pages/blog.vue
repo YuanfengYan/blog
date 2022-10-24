@@ -1,12 +1,29 @@
 <template>
   <div class="pageWarp">
     <el-row :gutter="10">
-      <el-col :xs="24" :md="8">
-        <template v-if="Array.isArray(categoryList) && categoryList.length">
-          <div v-for="item in categoryList" :key="item">item.name{{ item.name }}</div>
-        </template>
+      <el-col :xs="24" :sm="6">
+        <div class="category">
+          <el-divider><div class="categorytitle">分类</div></el-divider>
+          <el-radio-group
+            size="mini"
+            class="categoryWarp"
+            v-on:change="changeCategory"
+            v-model="categoryId"
+          >
+            <template v-if="Array.isArray(categoryList) && categoryList.length">
+              <el-radio
+                class="categoryItem"
+                v-for="item in categoryList"
+                :key="item.id"
+                :label="item.id"
+                border
+                >{{ item.name }}</el-radio
+              >
+            </template>
+          </el-radio-group>
+        </div>
       </el-col>
-      <el-col :xs="24" :md="16">
+      <el-col :xs="24" :sm="18">
         <ul
           v-if="article && article.data && article.data.length > 0"
           class="response-wrap article"
@@ -48,10 +65,13 @@ import { getCategory } from "@/request/api/category";
 
 export default {
   name: "BlogIndex",
+  data() {
+    return {};
+  },
   async asyncData({ query }) {
     const { id, keyword, category_id, page = 1 } = query;
     const [err, res] = await getArticleList({
-      id,
+      // id,
       category_id,
       keyword,
       page,
@@ -76,6 +96,7 @@ export default {
       categoryList: (state) => state.category.categoryList,
     }),
   },
+  watch: {},
   mounted() {
     this.getCategory();
   },
@@ -83,11 +104,53 @@ export default {
     getCategory() {
       this.$store.dispatch("category/getCategoryData");
     },
+    async changeCategory() {
+      const [err, res] = await getArticleList({
+        category_id: this.categoryId,
+      });
+
+      if (!err) {
+        this.article = res.data.data;
+      }
+    },
   },
 };
 </script>
-
+<style>
+span.el-radio__input {
+  display: none;
+}
+.el-radio {
+  margin: 0;
+}
+ul {
+  padding: 0;
+}
+</style>
 <style lang="scss" scoped>
+.category {
+  margin-top: 40px;
+  width: 100%;
+  overflow: hidden;
+  background-color: #eee;
+  .categorytitle {
+    font-size: 14px;
+    color: rgb(119, 5, 5);
+  }
+  .categoryWarp {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0 15px 15px 20px;
+    .categoryItem {
+      display: inline-block;
+      margin: 4px;
+    }
+  }
+}
 .article-list {
   box-sizing: border-box;
   display: block;

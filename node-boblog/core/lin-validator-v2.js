@@ -60,6 +60,7 @@ class LinValidator {
   }
 
   async validate(ctx, alias = {}) {
+
     this.alias = alias
     let params = this._assembleAllParams(ctx)
     this.data = cloneDeep(params)
