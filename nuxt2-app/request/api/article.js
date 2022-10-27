@@ -16,3 +16,10 @@ export function getArticleList(params) {
     params
   })
 }
+// 获取文章详情
+export function getArticleSearch(params) {
+  return GET({
+    url: article.search,
+    params
+  })
+}

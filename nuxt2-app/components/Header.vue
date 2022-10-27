@@ -16,31 +16,32 @@
         >
           {{ item.title }}
         </div>
-        <!-- <div v-if="Array.isArray(categoryList) && categoryList.length">
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              分类<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="item in categoryList" :key="item.id">
-                <a class="category-links" :href="'/?category_id=' + item.id">{{
-                  item.name
-                }}</a>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div> -->
       </div>
       <div class="search">
-        <el-input
+        <el-autocomplete
+          :debounce="600"
           v-model="keyword"
-          size="small"
-          :clearable="true"
+          :fetch-suggestions="querySearchAsync"
           placeholder="请输入内容"
-          prefix-icon="el-icon-search"
-          @keyup.enter.native="onSearch"
-        >
-        </el-input>
+          @select="handleSelect"
+          popper-class="searchlistwarp"
+          ><template slot-scope="{ item }">
+            <div class="search-list">
+              <div class="list-l">
+                <img :src="item.img_url" alt="" />
+              </div>
+              <div class="list-r">
+                <div class="list-r-top">
+                  <p class="list-r-t">{{ item.title }}</p>
+                  <p class="list-r-d">{{ item.description }}</p>
+                </div>
+                <div class="list-r-bottom">
+                  <p>{{ item.mm }}</p>
+                </div>
+              </div>
+            </div>
+          </template>
+        </el-autocomplete>
       </div>
     </div>
   </div>
@@ -48,7 +49,7 @@
 
 <script>
 import { mapState } from "vuex";
-// import { getCategory } from "@/request/api/category";
+import { getArticleSearch } from "@/request/api/article";
 export default {
   name: "VHeader",
   props: {},
@@ -86,6 +87,18 @@ export default {
     // getCategory() {
     //   this.$store.dispatch("category/getCategoryData");
     // },
+    handleSelect() {},
+    async querySearchAsync(queryString, cb) {
+      if (queryString == "") return;
+      console.log("开始查询");
+      const [err, res] = await getArticleSearch({ keyword: queryString });
+      console.log(err, res);
+      if (err) {
+        cb([]);
+      } else {
+        res.data.data ? cb(res.data.data) : cb([]);
+      }
+    },
     onSearch() {
       if (!this.keyword) return false;
       window.location.href = `/?keyword=${this.keyword}`;
@@ -119,7 +132,11 @@ export default {
   },
 };
 </script>
-
+<style>
+.searchlistwarp {
+  width: 300px !important;
+}
+</style>
 <style scoped lang="scss">
 .header {
   border-bottom: 1px solid #f0f0f0;
@@ -175,44 +192,53 @@ export default {
   }
 }
 
-.el-dropdown-link {
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0 32px;
-  color: #222222;
-  white-space: nowrap;
-
-  &:hover {
-    color: #2d8cf0;
-    text-decoration: underline;
-  }
-
-  &:hover .el-icon-arrow-down {
-    color: #2d8cf0;
-  }
-}
-
-.el-icon-arrow-down {
-  font-size: 16px;
-  color: #222222;
-}
-
-.category-links {
-  box-sizing: border-box;
-  display: block;
-  height: 100%;
-  width: 100%;
-  color: #222222;
-  font-size: 14px;
-  text-decoration: none;
-
-  &:hover {
-    color: #2d8cf0;
-  }
-}
-
 .search {
   cursor: pointer;
+  margin-right: 50px;
+}
+.search-list {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  .list-l {
+    width: 20%;
+    line-height: 100%;
+    img {
+      width: 90%;
+    }
+  }
+  .list-r {
+    width: 80%;
+    box-sizing: border-box;
+    padding-left: 4px;
+    .list-r-top {
+      padding-top: 5px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .list-r-t {
+        color: #2d8cf0;
+        line-height: 28px;
+        font-size: 16px;
+        padding-right: 10px;
+      }
+      .list-r-d {
+        color: red;
+        font-size: 14px;
+        line-height: 28px;
+      }
+    }
+    .list-r-bottom {
+      color: #333;
+      line-height: 30px;
+      box-sizing: border-box;
+      padding-bottom: 5px;
+    }
+  }
 }
 
 @media screen and (max-width: 540px) {

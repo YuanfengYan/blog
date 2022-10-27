@@ -5,6 +5,7 @@ const { Category } = require('@models/category')
 const { Comment } = require('@models/comment')
 const { Admin } = require('@models/admin')
 const { isArray, unique } = require('@lib/utils')
+const { QueryTypes } = require('sequelize');
 
 // 定义文章模型
 class ArticleDao {
@@ -42,7 +43,7 @@ class ArticleDao {
       const res = await article.save();
       return [null, res]
     } catch (err) {
-      console.log(err)
+      // console.log(err)
       return [err, null]
     }
   }
@@ -309,6 +310,72 @@ class ArticleDao {
       return [err, null]
     }
   }
+
+  // 搜索
+  static async search(query={}) {
+    
+    const { keyword } = query
+    try {
+      // const reg = "(\S{0,5})"+keyword+"(\S{0,2})"
+      let article = await Article.findAll({
+        attributes: ['title','img_url', ['content', 'mm'], 'description',"id"],
+        where:{
+          content:{
+            // [Op.regexp]:keyword//"(\S{0,5})"++"(\S{0,2})"
+            [Op.like]:"%"+keyword+"%"//"(\S{0,5})"++"(\S{0,2})"
+          }
+        }
+      })
+      console.log('article1',article)
+      
+      article.forEach(item=>{
+        item.dataValues.mm = item.dataValues.mm.match(new RegExp('([\\s|\\n|\\r|\\b|^\\S]\\S*)'+keyword+'([\\S|\\s]{0,15})'))[0]
+      })
+      console.log('article2',article)
+      // let filter = {
+      //   id,
+      //   deleted_at: null
+      // }
+
+      // let article = await Article.findOne({
+      //   where: filter,
+      // });
+
+      // const [categoryError, dataAndCategory] = await ArticleDao._handleCategory(article, article.category_id)
+      // if (!categoryError) {
+      //   article = dataAndCategory
+      // }
+
+      // // 处理创建人
+      // const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(article, article.admin_id)
+      // if (!userError) {
+      //   article = dataAndAdmin
+      // }
+
+
+      // if (!article) {
+      //   throw new global.errs.NotFound('没有找到相关文章');
+      // }
+
+      // const comment = await Comment.findAndCountAll({
+      //   where: {
+      //     article_id: id,
+      //     status: 1,
+      //     deleted_at: null
+      //   },
+      //   attributes: ['id']
+      // })
+
+      // if (comment) {
+      //   article.setDataValue('comment_count', comment.count || 0)
+      // }
+
+      return [null, article];
+    } catch (err) {
+      return [err, null]
+    }
+  }
+  
 
 }
 

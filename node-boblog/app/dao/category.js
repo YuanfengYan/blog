@@ -144,7 +144,7 @@ class CategoryDao {
       return [null, data]
 
     } catch (err) {
-      console.log('err', err)
+      // console.log('err', err)
 
       return [err, null]
     }

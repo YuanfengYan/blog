@@ -13,9 +13,9 @@ const router = new Router({
 // 指定一个url匹配
 router.get('/register', async (ctx) => {
   const [err, data] = await AdminDao.create({
-    email: "test1@163.com",//v.get('body.email'),
-    password: "1234567890",//v.get('body.password2'),
-    nickname: "test1",//v.get('body.nickname')
+    email: "yanyuanfeng_sspu@163.com",//v.get('body.email'),
+    password: "www.14020",//v.get('body.password2'),
+    nickname: "yanyuanfeng",//v.get('body.nickname')
   });
   if (!err) {
     // 返回结果
@@ -34,7 +34,7 @@ router.post('/login', async (ctx) => {
     email: reqBody.email,//v.get('body.email'),
     password: reqBody.password,//v.get('body.password')
   })
-  console.log([err, token])
+  // console.log([err, token])
 
   if (!err) {
     ctx.response.status = 200;
@@ -47,7 +47,7 @@ router.post('/login', async (ctx) => {
 // 获取用户信息
 router.get('/auth', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 获取用户ID
-  console.log('获取用户信息')
+  // console.log('获取用户信息')
   const id = ctx.auth.uid;
 
   // 查询用户信息

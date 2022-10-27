@@ -60,7 +60,7 @@ export default {
         {
           name: "keywords",
           content:
-            "波波,博客,波波博客,梁凤波,bo,blog,boblog,前端开发工程师,前端性能优化,JavaScript,css,html",
+            "波波,博客,波波博客,yanyuanfeng,bo,blog,boblog,前端开发工程师,前端性能优化,JavaScript,css,html",
         },
         {
           name: "description",

@@ -111,7 +111,7 @@ class CommentDao {
 
     try {
       const res = await comment.save();
-      console.log('res')
+      // console.log('res')
       return [null, res]
 
     } catch (err) {
@@ -201,7 +201,7 @@ class CommentDao {
 
   // 关联目标下的评论
   static async targetComment(params = {}) {
-    console.log('err',params)
+    // console.log('err',params)
     try {
       const {
         article_id = 0,

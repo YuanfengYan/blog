@@ -12,7 +12,9 @@
             文章分类：{{ article.category_info.name }}
           </span>
         </div>
-        <div class="article-content" v-html="article.content"></div>
+        <!-- <div class="article-content" v-html="article.content"></div> -->
+        <!-- <v-md-editor v-model="article.content"></v-md-editor> -->
+        <v-md-preview class="article-content" :text="article.content"></v-md-preview>
       </div>
       <div class="fixed-sidebar">
         <div class="fixed-scroll-top">
@@ -120,6 +122,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.article-content {
+  width: 768px;
+  margin: 0 auto;
+}
 ul,
 li {
   margin: 0;
