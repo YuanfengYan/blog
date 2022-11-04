@@ -7,7 +7,10 @@ export default {
   head: {
     title: 'nuxt2-app',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'en',
+    },
+    bodyAttrs:{
+      "data-theme":'dark'
     },
     meta: [
       { charset: 'utf-8' },
@@ -19,17 +22,29 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  env:{
+    baseUrl:process.env.BASE_URL || 'http://localhost:5000'
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'element-ui/lib/theme-chalk/index.css',
-    'assets/rest.css'
+    'assets/rest.css',
   ],
+  styleResources: {
+    scss: [
+      './assets/theme.scss'
+    ]
+  },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/md-editor',
     '@/plugins/element-ui',
     '@/plugins/axios',
     '@/plugins/axios-ports',
+    {src:'@/plugins/theme',ssr: false},
+    { src: '@/plugins/scrollTo', ssr: false }
+
+    
     
   ],
 
@@ -41,9 +56,14 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
   ],
-
+  router: {
+    // middleware: 'auth'
+  },
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios'],
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/style-resources' // 添加对应的模块
+  ],
   // axios: {
   //   proxy: true,
   //   // prefix: '/api/',
@@ -59,10 +79,10 @@ export default {
   //     }
   //   }
   // },
-  // server: {
-  //   port: 3000, // 默认: 3000
-  //   host: 'localhost' // 默认: localhost,
-  // },
+  server: {
+    port: 3000, // 默认: 3000
+    host: '0.0.0.0' // 默认: localhost,
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

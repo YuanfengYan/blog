@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="response-wrap">
+    <div class="article-wrap">
       <div class="article">
         <h1 class="title">
           {{ article.title }}
@@ -12,8 +12,6 @@
             文章分类：{{ article.category_info.name }}
           </span>
         </div>
-        <!-- <div class="article-content" v-html="article.content"></div> -->
-        <!-- <v-md-editor v-model="article.content"></v-md-editor> -->
         <v-md-preview class="article-content" :text="article.content"></v-md-preview>
       </div>
       <div class="fixed-sidebar">
@@ -23,37 +21,31 @@
       </div>
     </div>
 
-    <ArticleComment class="response-wrap" />
-    <img
-      width="0"
-      height="0"
-      style="display: none"
-      src="https://cdn.boblog.com/login-bg.png"
-      alt="preload"
-    />
-    <!-- <vue-lazy-component @after-leave="onLoadEnd">
-    </vue-lazy-component> -->
+    <vue-lazy-component @after-leave="onLoadEnd">
+      <ArticleComment class="response-wrap" />
+    </vue-lazy-component>
   </div>
 </template>
 <script>
 import { getArticleDetail } from "@/request/api/article";
 import ArticleComment from "@/components/article/ArticleComment";
 import { mapState } from "vuex";
-// import { component as VueLazyComponent } from "@xunlei/vue-lazy-component";
+import { component as VueLazyComponent } from "@xunlei/vue-lazy-component"; //懒加载组件
 
 export default {
   name: "ArticleDetail",
   components: {
     ArticleComment,
-    // VueLazyComponent,
+    VueLazyComponent,
   },
   async asyncData(context) {
     const { id } = context.query;
     const params = {
       id,
-      is_markdown: true,
+      is_markdown: false,
     };
     const [err, res] = await getArticleDetail(params);
+    console.log([res]);
     if (!err) {
       return {
         article: res.data.data,
@@ -101,11 +93,11 @@ export default {
   },
   methods: {
     initData() {
-      this.$nextTick(() => {
-        // const ProgressIndicator = require('@/lib/progress-indicator')
-        // // eslint-disable-next-line no-new
-        // this.progress = new ProgressIndicator()
-      });
+      // this.$nextTick(() => {
+      //   const ProgressIndicator = require("@/lib/progress-indicator");
+      //   // eslint-disable-next-line no-new
+      //   this.progress = new ProgressIndicator();
+      // });
     },
     // 回到顶部
     scrollTop() {
@@ -113,35 +105,25 @@ export default {
     },
     // 点击展开评论
     onLoadEnd() {
-      this.$nextTick(() => {
-        this.progress.calculateWidthPrecent();
-      });
+      console.log("wwww");
+      // this.$nextTick(() => {
+      //   this.progress.calculateWidthPrecent();
+      // });
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.article-content {
-  width: 768px;
-  margin: 0 auto;
-}
-ul,
-li {
-  margin: 0;
-  padding: 0;
-}
-.container {
-  box-sizing: border-box;
-  margin: 0 auto;
-}
-
 .article {
   box-sizing: border-box;
-  width: 100%;
+  width: 768px;
   margin: 80px auto 0;
   padding-bottom: 80px;
   border-bottom: 1px solid #e8e8e8;
+  .article-content {
+    margin: 0 auto;
+  }
 }
 
 .title {
@@ -153,11 +135,11 @@ li {
 }
 
 .info {
-  width: 100%;
+  width: 80%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 22px 0 48px;
+  justify-content: space-between;
+  margin: 22px auto 48px;
 }
 
 .info span {
@@ -166,7 +148,7 @@ li {
   font-weight: 400;
   color: #999999;
   line-height: 20px;
-  margin-right: 65px;
+  text-align: center;
 
   &:last-child {
     margin-right: 0;
@@ -182,14 +164,21 @@ li {
 @media screen and (max-width: 540px) {
   .article {
     margin: 32px auto 0;
+    box-sizing: border-box;
+    width: 100vw;
+    .article-content {
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
   .title {
     font-size: 32px;
-    text-align: left;
   }
+
   .info {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 
     & span {
       margin-right: 0;

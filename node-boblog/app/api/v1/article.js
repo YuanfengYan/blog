@@ -64,6 +64,7 @@ router.post('/article', new Auth(AUTH_ADMIN).m, async (ctx) => {
 router.delete('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
+  console.log('ctx',ctx)
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取文章ID参数
@@ -149,10 +150,10 @@ router.get('/article/:id', async (ctx) => {
     if (!commentError) {
       data.article_comment = commentData
     }
-
-    if (ctx.query.is_markdown) {
-      data.content = md.render(data.content)
-    }
+    // todo
+    // if (ctx.query.is_markdown) {
+    //   data.content = md.render(data.content)
+    // }
 
 
     // 更新文章浏览

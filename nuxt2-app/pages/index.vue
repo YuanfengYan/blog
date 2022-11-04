@@ -34,7 +34,7 @@
       <a v-if="isClear" href="/">清空搜索条件</a>
     </div>
 
-    <div v-if="isLoad" class="response-wrap more" @click="loadMore">
+    <div class="response-wrap more" @click="loadMore">
       <div class="more-text">点击加载更多</div>
       <div class="more-arrow">
         <img src="https://cdn.boblog.com/arrow.png" alt="" />
@@ -62,7 +62,7 @@ export default {
     });
     // console.log("[err, res]", [err, res]);
     if (!err) {
-      // console.log("111", [err, res]);
+      console.log("111", [err, res]);
       const isLoad = res.data.data.meta.total_pages > page;
       return {
         isClear: !!keyword || !!category_id,

@@ -21,6 +21,11 @@ Category.init({
     allowNull: false,
     comment: '分类名称'
   },
+  img: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    comment: '分类图片'
+  },
   status: {
     type: DataTypes.TINYINT,
     allowNull: true,

@@ -1,0 +1,62 @@
+
+// darkTheme
+$themes: (
+  light: (
+      header-background-color:rgba(246, 223, 223, 0.7),
+      background-color:#fff,
+      nav-font-color:rgba(0, 0, 0, 0.9)
+    ),
+    dark: (
+      background-color:#000,
+      header-background-color:rgba(52, 50, 50, 0.7),
+      nav-font-color:rgba(255, 255, 255, 0.9),
+      dropdown-background-color:#343232,
+      dropdown-hover-background-color:#403E3E
+  )
+);
+$theme-map: null;
+//遍历主题map
+@mixin themeify {
+  @each $theme-name, $theme-map in $themes {
+    //!global 把局部变量强升为全局变量
+    $theme-map: $theme-map !global;
+    //判断html的data-theme的属性值  #{}是sass的插值表达式
+    //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
+    [data-theme="#{$theme-name}"] & {
+      @content;
+    }
+  }
+}
+
+//声明一个根据Key获取颜色的function
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+//获取背景颜色
+@mixin background_color($color) {
+  @include themeify {
+    background-color: themed($color) !important;
+  }
+}
+
+//获取字体颜色
+@mixin font_color($color) {
+  @include themeify {
+    color: themed($color) !important;
+  }
+}
+
+//获取边框颜色
+@mixin border_color($color) {
+  @include themeify {
+    border-color: themed($color) !important;
+  }
+}
+//获取边框颜色
+@mixin border-bottom-color($color) {
+  @include themeify {
+    border-bottom-color: themed($color) !important;
+  }
+}
+

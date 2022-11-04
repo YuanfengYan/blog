@@ -1,9 +1,14 @@
 <template>
-  <div class="header">
-    <div class="header-inner">
-      <a class="logo" href="/"></a>
-      <div class="nav">
-        <div
+  <header class="header">
+    <el-button
+      :class="['menu', showSlideFlag ? 'move' : '']"
+      @click="tiggerSlidMenu"
+      round
+      >MENU</el-button
+    >
+    <nav class="header-inner">
+      <ul class="nav">
+        <li
           v-for="(item, index) in nav"
           :key="index"
           :class="[
@@ -15,8 +20,22 @@
           @click="jumpURL(item.router)"
         >
           {{ item.title }}
-        </div>
-      </div>
+        </li>
+        <li class="nav-item" v-if="Array.isArray(categoryList) && categoryList.length">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              分类<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="item in categoryList" :key="item.id">
+                <a class="category-links" :href="'/?category_id=' + item.id">{{
+                  item.name
+                }}</a>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </li>
+      </ul>
       <div class="search">
         <el-autocomplete
           :debounce="600"
@@ -43,8 +62,27 @@
           </template>
         </el-autocomplete>
       </div>
-    </div>
-  </div>
+    </nav>
+    <nav :class="['nav-v', showSlideFlag ? 'show' : '']">
+      <el-menu default-active="activeIndex" class="el-menu-demo" @select="handleSelect">
+        <el-menu-item index="1">处理中心</el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">我的工作台</template>
+          <el-menu-item index="2-1">选项1</el-menu-item>
+          <el-menu-item index="2-2">选项2</el-menu-item>
+          <el-menu-item index="2-3">选项3</el-menu-item>
+          <el-submenu index="2-4">
+            <template slot="title">选项4</template>
+            <el-menu-item index="2-4-1">选项1</el-menu-item>
+            <el-menu-item index="2-4-2">选项2</el-menu-item>
+            <el-menu-item index="2-4-3">选项3</el-menu-item>
+          </el-submenu>
+        </el-submenu>
+      </el-menu>
+    </nav>
+
+    <div class="banner"></div>
+  </header>
 </template>
 
 <script>
@@ -57,6 +95,7 @@ export default {
     return {
       keyword: "",
       navIndex: 0,
+      showSlideFlag: false,
       nav: [
         {
           title: "博客",
@@ -81,12 +120,16 @@ export default {
   },
   mounted() {
     this.handleNav();
-    // this.getCategory();
+    this.getCategory();
   },
   methods: {
-    // getCategory() {
-    //   this.$store.dispatch("category/getCategoryData");
-    // },
+    // 展示侧边栏
+    tiggerSlidMenu() {
+      this.showSlideFlag = !this.showSlideFlag;
+    },
+    getCategory() {
+      this.$store.dispatch("category/getCategoryData");
+    },
     handleSelect() {},
     async querySearchAsync(queryString, cb) {
       if (queryString == "") return;
@@ -132,23 +175,61 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
 .searchlistwarp {
   width: 300px !important;
+}
+.el-dropdown-menu .popper__arrow {
+  @include border-bottom-color("dropdown-background-color");
+}
+.el-dropdown-menu .popper__arrow::after {
+  @include border-bottom-color("dropdown-background-color");
+}
+
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  @include background_color("dropdown-hover-background-color");
+}
+.el-dropdown-menu {
+  &.el-popper {
+    border: none !important;
+  }
 }
 </style>
 <style scoped lang="scss">
 .header {
-  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+  z-index: 1000;
+  .banner {
+    width: 100%;
+    height: 200px;
+    background-color: rgb(66, 122, 118);
+  }
+}
+//
+.menu {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 30px;
+  z-index: 10;
+  transition: all 0.3s linear;
+  &.move {
+    left: 230px;
+  }
 }
 
 .header-inner {
+  position: fixed;
+  top: 0;
+  left: -10px;
+  right: -10px;
+  @include background_color("header-background-color");
   box-sizing: border-box;
   height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   .logo {
     cursor: pointer;
     box-sizing: border-box;
@@ -158,7 +239,6 @@ export default {
     background: url("../assets/logo.png") center center no-repeat;
     background-size: contain;
   }
-
   .nav {
     box-sizing: border-box;
     flex: 1;
@@ -171,84 +251,108 @@ export default {
       box-sizing: border-box;
       height: 56px;
       line-height: 56px;
-      padding: 0 32px;
+      padding: 0 10px;
       white-space: nowrap;
       cursor: pointer;
       display: block;
       text-align: center;
       font-size: 16px;
-      color: #222222;
+      @include font_color("nav-font-color");
       text-decoration: none;
-
-      &-active {
-        color: #2d8cf0;
-      }
-
-      &:hover {
-        color: #2d8cf0;
-        text-decoration: underline;
+      .el-dropdown {
+        @include font_color("nav-font-color");
+        font-size: 16px;
       }
     }
+  }
+}
+.nav-v {
+  @include background_color("header-background-color");
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  left: -202px;
+  top: 0;
+  transition: all 0.3s linear;
+  &.show {
+    left: 0;
   }
 }
 
 .search {
   cursor: pointer;
   margin-right: 50px;
-}
-.search-list {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  box-sizing: border-box;
-  background-color: #f9f9f9;
-  .list-l {
-    width: 20%;
-    line-height: 100%;
-    img {
-      width: 90%;
+  .search-list {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    .list-l {
+      width: 20%;
+      line-height: 100%;
+      img {
+        width: 90%;
+      }
+    }
+    .list-r {
+      width: 80%;
+      box-sizing: border-box;
+      padding-left: 4px;
+      .list-r-top {
+        padding-top: 5px;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .list-r-t {
+          color: #2d8cf0;
+          line-height: 28px;
+          font-size: 16px;
+          padding-right: 10px;
+        }
+        .list-r-d {
+          color: red;
+          font-size: 14px;
+          line-height: 28px;
+        }
+      }
+      .list-r-bottom {
+        color: #333;
+        line-height: 30px;
+        box-sizing: border-box;
+        padding-bottom: 5px;
+      }
     }
   }
-  .list-r {
-    width: 80%;
-    box-sizing: border-box;
-    padding-left: 4px;
-    .list-r-top {
-      padding-top: 5px;
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      .list-r-t {
-        color: #2d8cf0;
-        line-height: 28px;
-        font-size: 16px;
-        padding-right: 10px;
-      }
-      .list-r-d {
-        color: red;
-        font-size: 14px;
-        line-height: 28px;
-      }
-    }
-    .list-r-bottom {
-      color: #333;
-      line-height: 30px;
-      box-sizing: border-box;
-      padding-bottom: 5px;
-    }
+}
+// elementui样式覆盖
+.el-dropdown-menu {
+  width: 200px;
+  @include background_color("dropdown-background-color");
+  .el-dropdown-menu__item > a {
+    font-size: 16px;
+    @include font_color("nav-font-color");
+    text-decoration: none;
   }
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (max-width: 768px) {
   .nav {
     display: none;
   }
 
-  .search {
-    flex: 1;
-    margin-left: 24px;
+  .menu {
+    display: block;
+  }
+  .header-inner {
+    display: none;
+  }
+}
+@media screen and (min-width: 768px) {
+  .nav-v {
+    display: none;
   }
 }
 </style>

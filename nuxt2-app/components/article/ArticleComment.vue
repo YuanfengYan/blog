@@ -84,7 +84,7 @@
 
     <el-dialog
       :visible.sync="isLogin"
-      width="880px"
+      width="350px"
       top="0"
       :lock-scroll="true"
       :before-close="handleClose"
@@ -242,7 +242,7 @@ export default {
 .comment {
   box-sizing: border-box;
   padding: 80px 0 120px;
-  width: 100%;
+  width: 80%;
   margin: 0 auto;
 
   &-list {

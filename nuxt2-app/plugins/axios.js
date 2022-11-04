@@ -34,8 +34,8 @@ const allowRequest = function (reqList, url) {
     }
   }
 }
-
-  $axios.defaults.baseURL = 'http://192.168.10.238:5000/'//process.env.BASE_URL
+// console.log('process.env.baseUrl',process.env.baseUrl)
+  $axios.defaults.baseURL = process.env.baseUrl// 'http://192.168.10.238:5000/'//process.env.BASE_URL
   $axios.onRequest(config => {
     // console.log('process.env.BASE_URL',config)
     //  config.baseURL ='http://192.168.10.238:5000/'

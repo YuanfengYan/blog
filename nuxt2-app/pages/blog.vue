@@ -1,7 +1,7 @@
 <template>
   <div class="pageWarp">
     <el-row :gutter="10">
-      <el-col :xs="24" :sm="6">
+      <el-col :xs="0" :sm="6">
         <div class="category">
           <el-divider><div class="categorytitle">分类</div></el-divider>
           <el-radio-group
@@ -29,11 +29,7 @@
           class="response-wrap article"
         >
           <li v-for="item in article.data" :key="item.id" class="article-list">
-            <a
-              :href="'/article?id=' + item.id"
-              class="article-item"
-              @click="(e) => jumpURL(e, item.id)"
-            >
+            <a :href="'/article?id=' + item.id" class="article-item">
               <div class="article-image">
                 <img :src="item.img_url" :alt="item.title" />
               </div>
@@ -53,6 +49,17 @@
             </a>
           </li>
         </ul>
+        <div v-else class="empty-data">
+          暂无数据
+          <a v-if="isClear" href="/">清空搜索条件</a>
+        </div>
+
+        <div v-if="isLoad" class="response-wrap more" @click="loadMore">
+          <div class="more-text">点击加载更多</div>
+          <div class="more-arrow">
+            <img src="https://cdn.boblog.com/arrow.png" alt="" />
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -80,6 +87,7 @@ export default {
     });
     if (!err) {
       const isLoad = res.data.data.meta.total_pages > page;
+      console.log("xxxxx", res);
       return {
         isClear: !!keyword || !!category_id,
         page,
@@ -113,6 +121,25 @@ export default {
         this.article = res.data.data;
       }
     },
+    // 获取新数据
+    async fetchData(id) {
+      const [err, res] = await getArticleList({
+        category_id: id,
+        is_category: 1,
+        is_admin: 1,
+        page: this.page,
+      });
+      if (!err) {
+        this.categoryId = id;
+        this.article.data.push(...res.data.data.data);
+        this.isLoad = res.data.data.meta.total_pages > this.page;
+      }
+    },
+    // 加载更多分页
+    loadMore() {
+      this.page++;
+      this.fetchData();
+    },
   },
 };
 </script>
@@ -123,11 +150,12 @@ span.el-radio__input {
 .el-radio {
   margin: 0;
 }
-ul {
-  padding: 0;
-}
 </style>
 <style lang="scss" scoped>
+.pageWarp {
+  width: 1150px;
+  margin: 0 auto;
+}
 .category {
   margin-top: 40px;
   width: 100%;
@@ -219,28 +247,21 @@ ul {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-}
-.more-text {
-  font-size: 16px;
-  font-weight: 400;
-  color: #222222;
-  line-height: 22px;
-}
-.more-arrow {
-  width: 16px;
-  margin-top: 24px;
-}
-.more-arrow img {
-  width: 100%;
+  .more-text {
+    font-size: 16px;
+    font-weight: 400;
+    color: #222222;
+    line-height: 22px;
+  }
+  .more-arrow {
+    width: 16px;
+    margin-top: 24px;
+  }
+  .more-arrow img {
+    width: 100%;
+  }
 }
 
-@media screen and (max-width: 540px) {
-  .article-list {
-    padding: 24px 0;
-  }
-
-  .article-image {
-    width: 90px;
-  }
+@media screen and (max-width: 768px) {
 }
 </style>

@@ -7,7 +7,8 @@ class CategoryDao {
     const {
       name,
       sort_order = 1,
-      parent_id = 0
+      parent_id = 0,
+      img,
     } = params
     // 查询是否存在重复的分类
     const hasCategory = await Category.findOne({
@@ -25,6 +26,7 @@ class CategoryDao {
     category.name = name
     category.sort_order = sort_order
     category.parent_id = parent_id
+    category.img = img
 
     try {
       const res = await category.save();
