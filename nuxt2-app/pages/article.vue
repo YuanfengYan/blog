@@ -31,6 +31,7 @@ import { getArticleDetail } from "@/request/api/article";
 import ArticleComment from "@/components/article/ArticleComment";
 import { mapState } from "vuex";
 import { component as VueLazyComponent } from "@xunlei/vue-lazy-component"; //懒加载组件
+import Clipboard from "clipboard";
 
 export default {
   name: "ArticleDetail",
@@ -98,6 +99,8 @@ export default {
       //   // eslint-disable-next-line no-new
       //   this.progress = new ProgressIndicator();
       // });
+      this.creatCopyBtn();
+      this.copy();
     },
     // 回到顶部
     scrollTop() {
@@ -109,6 +112,35 @@ export default {
       // this.$nextTick(() => {
       //   this.progress.calculateWidthPrecent();
       // });
+    },
+    creatCopyBtn() {
+      const codeDoms = document.querySelectorAll("pre");
+      let i = document.createElement("i");
+      i.setAttribute("class", "el-icon-copy-document hljs-copy");
+      i.setAttribute("data-clipboard-action", "copy");
+      Array.from(codeDoms).forEach((item, index) => {
+        let dom = i.cloneNode(false);
+        let i_text = document.createTextNode("复制");
+        dom.appendChild(i_text);
+        dom.setAttribute("data-clipboard-target", "#copy" + index);
+        item.appendChild(dom);
+        let child = item.children[0];
+        child.setAttribute("id", "copy" + index);
+      });
+    },
+    copy() {
+      this.$nextTick(() => {
+        this.clipboard = new Clipboard(".hljs-copy");
+        this.clipboard.on("success", (e) => {
+          // console.log(e)
+          this.$message.success("复制成功");
+          e.clearSelection(); // 清除文本的选中状态
+        });
+        this.clipboard.on("error", (e) => {
+          this.$message.error("复制失败");
+          e.clearSelection(); // 清除文本的选中状态
+        });
+      });
     },
   },
 };
@@ -129,7 +161,7 @@ export default {
 .title {
   font-size: 36px;
   font-weight: 600;
-  color: #222222;
+  @include font_color("text-color");
   line-height: 42px;
   text-align: center;
 }
@@ -146,7 +178,8 @@ export default {
   height: 20px;
   font-size: 14px;
   font-weight: 400;
-  color: #999999;
+  // color: #999999;
+  @include font_color("text-color2");
   line-height: 20px;
   text-align: center;
 

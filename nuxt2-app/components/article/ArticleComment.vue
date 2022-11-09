@@ -279,11 +279,13 @@ export default {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    @include background_color("background-color3");
+    // background: #292e4e;
 
     &-type {
       font-size: 18px;
       font-weight: 500;
-      color: #222222;
+      @include font_color("text-color");
     }
 
     &-btn {
@@ -301,7 +303,7 @@ export default {
       color: #fff;
       line-height: 22px;
       margin-top: 16px;
-      background: #222222;
+      @include background_color("background-color2");
     }
   }
   &-content {
@@ -351,7 +353,7 @@ export default {
   padding-bottom: 24px;
   font-size: 24px;
   font-weight: 600;
-  color: #222222;
+  @include font_color("text-color");
   border-bottom: 1px solid #e8e8e8;
 }
 
@@ -377,7 +379,8 @@ export default {
     height: 22px;
     font-size: 16px;
     font-weight: 400;
-    color: #222222;
+    // color: #222222;
+    @include font_color("text-color");
   }
   &-intro {
     height: 20px;
@@ -399,9 +402,11 @@ export default {
     line-height: 22px;
     font-size: 16px;
     font-weight: 400;
-    color: #222222;
+    // color: #222222;
+    @include font_color("text-color");
     background: #f7f7f7;
     &-list {
+      @include font_color("text-color2");
       margin-bottom: 8px;
     }
   }
@@ -448,7 +453,7 @@ export default {
   &-content {
     font-size: 16px;
     font-weight: 400;
-    color: #222;
+    @include font_color("text-color");
     line-height: 22px;
   }
 }

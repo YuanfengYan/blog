@@ -185,22 +185,24 @@ span.el-radio__input {
   top: 70px;
   overflow: hidden;
   height: auto;
-  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
   border-radius: 0.25rem;
   box-sizing: border-box;
   padding: 15px;
-  background: #fff;
+  @include background-color("content-background-color");
+  @include box-shadow("content-box-shadow");
   .personal-info-wrapper {
     & > h2 {
       color: #000;
       text-align: center;
       margin: 10px auto 20px;
+      @include font_color("text-color");
     }
   }
   .num {
     display: flex;
     margin: 0 auto 10px;
     width: 80%;
+    @include font_color("text-color");
     & > div:first-child {
       border-right: 1px solid #333;
     }
@@ -208,13 +210,14 @@ span.el-radio__input {
       flex-basis: 50%;
       text-align: center;
       h3 {
+        @include font_color("text-color");
         font-size: 16px;
         line-height: 25px;
       }
       h6 {
         line-height: 20px;
         font-size: 12px;
-        color: #242424;
+        @include font_color("text-color");
       }
     }
   }
@@ -252,16 +255,16 @@ span.el-radio__input {
       display: block;
       margin: 0 auto 20px;
       padding: 16px 20px;
-      border-bottom: 1px solid #f0f0f0;
       text-decoration: none;
       display: flex;
       justify-content: flex-start;
       align-items: center;
       transition: all 0.2s linear;
-      box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      @include background-color("content-background-color");
+      @include box-shadow("content-box-shadow");
       &:hover {
-        color: #0164da;
-        box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.3);
+        @include box-shadow("content-hover-box-shadow");
       }
       .article-image {
         width: 100px;
@@ -279,14 +282,14 @@ span.el-radio__input {
       .article-title {
         font-weight: bold;
         font-size: 18px;
-        color: #404040;
+        @include font_color("text-color");
         padding: 0;
         margin: 0;
       }
 
       .article-description {
         font-size: 14px;
-        color: #404040;
+        @include font_color("text-color2");
         margin: 12px 0 24px;
       }
 
@@ -328,5 +331,24 @@ span.el-radio__input {
   .pageWarp {
     display: block;
   }
+  .info-wrapper {
+    display: none;
+  }
+}
+
+pre {
+  /*控制代码不换行*/
+  white-space: pre;
+  word-wrap: normal;
+}
+
+.cnblogs-markdown .hljs {
+  display: block;
+  overflow: auto;
+  padding: 1.3em 2em !important;
+  font-size: 16px !important;
+  background: #272822 !important;
+  color: #fff;
+  max-height: 700px;
 }
 </style>

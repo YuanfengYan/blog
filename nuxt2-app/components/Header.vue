@@ -22,7 +22,7 @@
           {{ item.title }}
         </li>
         <li class="nav-item" v-if="Array.isArray(categoryList) && categoryList.length">
-          <el-dropdown>
+          <el-dropdown placement="bottom-start">
             <span class="el-dropdown-link">
               分类<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
@@ -36,6 +36,7 @@
           </el-dropdown>
         </li>
       </ul>
+
       <div class="search">
         <el-autocomplete
           :debounce="600"
@@ -62,25 +63,37 @@
           </template>
         </el-autocomplete>
       </div>
-    </nav>
-    <nav :class="['nav-v', showSlideFlag ? 'show' : '']">
-      <el-menu default-active="activeIndex" class="el-menu-demo" @select="handleSelect">
-        <el-menu-item index="1">处理中心</el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">我的工作台</template>
-          <el-menu-item index="2-1">选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-          <el-menu-item index="2-3">选项3</el-menu-item>
-          <el-submenu index="2-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="2-4-1">选项1</el-menu-item>
-            <el-menu-item index="2-4-2">选项2</el-menu-item>
-            <el-menu-item index="2-4-3">选项3</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-      </el-menu>
+      <el-switch
+        v-model="themeIsDark"
+        active-icon-class="el-icon-moon"
+        inactive-icon-class="el-icon-sunny"
+        active-color="#232b26"
+        inactive-color="#5fbdcb"
+      >
+      </el-switch>
     </nav>
 
+    <el-drawer
+      direction="ltr"
+      title="我是标题"
+      :visible.sync="showSlideFlag"
+      :wrapperClosable="true"
+      :show-close="true"
+      :append-to-body="true"
+      custom-class="navVWarp"
+    >
+      <el-menu default-active="activeIndex" class="el-menu-slide" @select="handleSelect">
+        <template v-for="item in nav">
+          <el-menu-item :index="item.id">{{ item.title }}</el-menu-item>
+        </template>
+        <el-submenu index="cate2">
+          <template slot="title">分类</template>
+          <el-menu-item index="2-1" v-for="cate in categoryList" :key="cate.id">
+            {{ cate.name }}
+          </el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </el-drawer>
     <div class="banner"></div>
   </header>
 </template>
@@ -93,6 +106,7 @@ export default {
   props: {},
   data() {
     return {
+      themeIsDark: true,
       keyword: "",
       navIndex: 0,
       showSlideFlag: false,
@@ -116,6 +130,9 @@ export default {
       handler() {
         this.handleNav();
       },
+    },
+    themeIsDark: function (newval) {
+      document.body.setAttribute("data-theme", newval ? "dark" : "light");
     },
   },
   mounted() {
@@ -180,10 +197,10 @@ export default {
   width: 300px !important;
 }
 .el-dropdown-menu .popper__arrow {
-  @include border-bottom-color("dropdown-background-color");
+  @include border_bottom_color("dropdown-background-color");
 }
 .el-dropdown-menu .popper__arrow::after {
-  @include border-bottom-color("dropdown-background-color");
+  @include border_bottom_color("dropdown-background-color");
 }
 
 .el-dropdown-menu__item:focus,
@@ -226,7 +243,7 @@ export default {
   right: -10px;
   @include background_color("header-background-color");
   box-sizing: border-box;
-  height: 56px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -234,7 +251,7 @@ export default {
     cursor: pointer;
     box-sizing: border-box;
     display: block;
-    height: 56px;
+    height: 70px;
     width: 150px;
     background: url("../assets/logo.png") center center no-repeat;
     background-size: contain;
@@ -242,41 +259,50 @@ export default {
   .nav {
     box-sizing: border-box;
     flex: 1;
-    height: 56px;
+    height: 70px;
     display: flex;
     margin: 0 64px;
     align-items: center;
 
     .nav-item {
       box-sizing: border-box;
-      height: 56px;
-      line-height: 56px;
-      padding: 0 10px;
+      line-height: 100%;
+      padding: 0 20px;
       white-space: nowrap;
       cursor: pointer;
       display: block;
       text-align: center;
-      font-size: 16px;
+      font-size: 18px;
       @include font_color("nav-font-color");
       text-decoration: none;
       .el-dropdown {
         @include font_color("nav-font-color");
-        font-size: 16px;
+        font-size: 18px;
       }
     }
   }
 }
-.nav-v {
-  @include background_color("header-background-color");
-  height: 100vh;
-  width: 200px;
-  position: fixed;
-  left: -202px;
-  top: 0;
-  transition: all 0.3s linear;
-  &.show {
-    left: 0;
+::v-deep .navVWarp {
+  background: #191919;
+  width: 200px !important;
+}
+::v-deep .el-menu-slide {
+  border: none;
+}
+::v-deep .el-menu-item,
+.el-submenu {
+  background: rgba(25, 25, 25);
+  text-align: center;
+  color: #fff;
+}
+::v-deep .el-submenu__title {
+  color: #fff;
+  &:hover {
+    background: #333333;
   }
+}
+.el-switch {
+  margin-right: 20px;
 }
 
 .search {
