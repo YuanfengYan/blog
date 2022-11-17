@@ -23,3 +23,10 @@ export function getArticleSearch(params) {
     params
   })
 }
+// 获取文章详情
+export function getArticleBaseInfo(params) {
+  return GET({
+    url: article.baseinfo,
+    params
+  })
+}

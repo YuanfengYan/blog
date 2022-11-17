@@ -9,6 +9,11 @@ import hljs from 'highlight.js';
 
 VMdPreview.use(githubTheme, {
   Hljs: hljs,
+  config: {
+    toc: {
+      includeLevel: [3, 4],
+    },
+  },
 });
 
 Vue.use(VMdPreview);

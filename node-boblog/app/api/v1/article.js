@@ -64,7 +64,7 @@ router.post('/article', new Auth(AUTH_ADMIN).m, async (ctx) => {
 router.delete('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
-  console.log('ctx',ctx)
+  // console.log('ctx',ctx)
   const v = await new PositiveIdParamsValidator().validate(ctx);
 
   // 获取文章ID参数
@@ -99,13 +99,13 @@ router.put('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 })
 
 /**
- * 获取文章列表
+ * 查询
  */
  router.get('/article/search', async (ctx) => {
   // const { keyword = 0} = ctx.query;
   // 没有缓存，则读取数据库
   const [err, data] = await ArticleDao.search(ctx.query);
-  console.log(err,data)
+  // console.log(err,data)
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.json(data)
@@ -129,7 +129,19 @@ router.get('/article', async (ctx) => {
     ctx.body = res.fail(err)
   }
 });
-
+/**
+ * 获取blog的文章基本信息
+ */
+ router.get('/article/baseinfo', async (ctx) => {
+  // 没有缓存，则读取数据库
+  const [err, data] = await ArticleDao.baseInfo();
+  if (!err) {
+    ctx.response.status = 200;
+    ctx.body = res.json(data)
+  } else {
+    ctx.body = res.fail(err)
+  }
+});
 /**
  * 查询文章详情
  */
@@ -165,6 +177,10 @@ router.get('/article/:id', async (ctx) => {
     ctx.body = res.fail(err);
   }
 })
+
+
+
+
 
 
 module.exports = router

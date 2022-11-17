@@ -12,16 +12,28 @@
             文章分类：{{ article.category_info.name }}
           </span>
         </div>
-        <v-md-preview class="article-content" :text="article.content"></v-md-preview>
+        <v-md-preview ref="markdownwarp" class="article-content" :text="article.content">
+        </v-md-preview>
       </div>
-      <div class="fixed-sidebar">
-        <div class="fixed-scroll-top">
+      <div class="fixedSidebar">
+        <div class="slide-icon">
+          <i
+            :class="['el-icon-tickets', showArticleNav ? 'active' : '']"
+            @click="showNav"
+          ></i>
+        </div>
+        <div class="slide-icon">
           <i class="el-icon-top" @click="scrollTop"></i>
         </div>
+        <ul :class="['articleNav', showArticleNav ? 'active' : '']">
+          <li v-for="item in titles" class="navItem" @click="gonav(item.id)">
+            {{ item.content }}
+          </li>
+        </ul>
       </div>
     </div>
 
-    <vue-lazy-component @after-leave="onLoadEnd">
+    <vue-lazy-component v-if="reWrite" @after-leave="onLoadEnd">
       <ArticleComment class="response-wrap" />
     </vue-lazy-component>
   </div>
@@ -46,7 +58,7 @@ export default {
       is_markdown: false,
     };
     const [err, res] = await getArticleDetail(params);
-    console.log([res]);
+    // console.log([res]);
     if (!err) {
       return {
         article: res.data.data,
@@ -56,7 +68,23 @@ export default {
   data() {
     return {
       isLogin: false,
+      reWrite: true,
+      titles: [],
+      showArticleNav: false, //是否显示文章目录导航栏
     };
+  },
+  watch: {
+    // 监听路由是否变化
+    $route(to, from) {
+      if (to.query.id != from.query.id) {
+        console.log("query", to.query.id);
+        this.getArticleDetail2(to.query.id);
+        this.reWrite = false;
+        this.$nextTick(() => {
+          this.reWrite = true;
+        });
+      }
+    },
   },
   async fetch({ store }) {
     await store.dispatch("category/getCategoryData");
@@ -94,13 +122,64 @@ export default {
   },
   methods: {
     initData() {
-      // this.$nextTick(() => {
-      //   const ProgressIndicator = require("@/lib/progress-indicator");
-      //   // eslint-disable-next-line no-new
-      //   this.progress = new ProgressIndicator();
-      // });
       this.creatCopyBtn();
       this.copy();
+      this.showTitles();
+    },
+    showNav() {
+      this.showArticleNav = !this.showArticleNav;
+    },
+    /**
+     * 目录跳转
+     */
+    gonav(id) {
+      document.getElementById(id).scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    },
+    getcontent(h) {
+      var text = [].slice
+        .call(h.childNodes)
+        .map(function (node) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            return node.nodeValue;
+          } else if (["CODE", "SPAN"].indexOf(node.tagName) !== -1) {
+            return node.textContent;
+          } else {
+            return "";
+          }
+        })
+        .join("")
+        .replace(/\(.*\)$/, "");
+      return text;
+    },
+    /**
+     * 显示目录
+     */
+    showTitles() {
+      let self = this;
+      let content = this.$refs.markdownwarp.$el;
+      // 提取h2标签
+      let h2dom = content.querySelectorAll("h2");
+      let each = [].forEach;
+      each.call(h2dom, (h) => {
+        let id = h.getAttribute("data-v-md-line");
+        h.setAttribute("id", id);
+        this.titles.push({
+          id,
+          content: this.getcontent(h),
+        });
+      });
+    },
+    async getArticleDetail2(id) {
+      const [err, res] = await getArticleDetail({
+        id,
+        is_markdown: false,
+      });
+      if (!err) {
+        this.article = res.data.data;
+      }
     },
     // 回到顶部
     scrollTop() {
@@ -187,14 +266,68 @@ export default {
     margin-right: 0;
   }
 }
-.fixed-sidebar {
+.fixedSidebar {
   cursor: pointer;
   position: fixed;
+  z-index: 1001;
   bottom: 32px;
   right: 32px;
+  .articleNav {
+    border-radius: 6px;
+    box-sizing: border-box;
+    cursor: auto;
+    padding: 20px 0px 10px 20px;
+    position: absolute;
+    bottom: 80px;
+    right: 0px;
+    transition: all 0.2s linear;
+    height: 70vh;
+    width: 30vh;
+    overflow-y: auto;
+    transform: scale(0);
+    transform-origin: 100% 100%;
+    z-index: 10;
+    @include background_color("header-background-color");
+    &.active {
+      transform: scale(1);
+    }
+    .navItem {
+      @include font_color("text-color");
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 10px 0 10px 10px;
+      font-size: 16px;
+      position: relative;
+      &:hover {
+        cursor: pointer;
+        color: #3eaf7c !important;
+      }
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 3px;
+        height: 18px;
+        left: 0;
+        background: #3eaf7c;
+        top: 10px;
+      }
+    }
+  }
+  .slide-icon {
+    margin-top: 20px;
+    i {
+      font-size: 22px;
+      @include font_color("text-color");
+      &.active {
+        color: #3eaf7c !important;
+      }
+    }
+  }
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (max-width: 768px) {
   .article {
     margin: 32px auto 0;
     box-sizing: border-box;

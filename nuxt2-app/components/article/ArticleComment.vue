@@ -3,7 +3,7 @@
     <div class="comment">
       <div class="comment-from">
         <div class="comment-avatar">
-          <img src="https://cdn.boblog.com/avatar.png" alt="avatar" />
+          <Avatar :str="new Date().getTime() + ''"></Avatar>
         </div>
         <div class="comment-textarea">
           <textarea
@@ -96,6 +96,7 @@
 
 <script>
 import LoginForm from "@/components/LoginForm";
+import Avatar from "@/components/Avatar";
 import { mapState } from "vuex";
 import { getCommentTarget, createComment } from "@/request/api/comment";
 import { isArray } from "@/lib/utils";
@@ -105,6 +106,7 @@ export default {
   name: "ArticleComment",
   components: {
     LoginForm,
+    Avatar,
   },
   props: {
     reply: {
@@ -114,6 +116,7 @@ export default {
   },
   data() {
     return {
+      randomstr: new Date().getTime() + "",
       page: 1,
       count: 0,
       commentContent: "",
@@ -354,14 +357,12 @@ export default {
   font-size: 24px;
   font-weight: 600;
   @include font_color("text-color");
-  border-bottom: 1px solid #e8e8e8;
 }
 
 .comment-item {
   box-sizing: border-box;
   padding: 32px 0;
   display: flex;
-  border-bottom: 1px solid #e8e8e8;
 
   &-avatar {
     width: 40px;

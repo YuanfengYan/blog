@@ -6,6 +6,7 @@
       round
       >MENU</el-button
     >
+    <!-- pc端 -->
     <nav class="header-inner">
       <ul class="nav">
         <li
@@ -22,15 +23,20 @@
           {{ item.title }}
         </li>
         <li class="nav-item" v-if="Array.isArray(categoryList) && categoryList.length">
-          <el-dropdown placement="bottom-start">
+          <el-dropdown trigger="click" placement="bottom-start" @command="jumpURL">
             <span class="el-dropdown-link">
               分类<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="item in categoryList" :key="item.id">
-                <a class="category-links" :href="'/?category_id=' + item.id">{{
-                  item.name
-                }}</a>
+              <el-dropdown-item
+                v-for="item in categoryList"
+                :command="'/?category_id=' + item.id"
+                :key="item.id"
+              >
+                {{ item.name }}
+                <!-- <a class="category-links" :href="'/?category_id=' + item.id">{{
+                 
+                }}</a> -->
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -44,9 +50,10 @@
           :fetch-suggestions="querySearchAsync"
           placeholder="请输入内容"
           @select="handleSelect"
+          highlight-first-item
           popper-class="searchlistwarp"
           ><template slot-scope="{ item }">
-            <div class="search-list">
+            <div class="search-list" @click="jumpURL('/article?id=' + item.id)">
               <div class="list-l">
                 <img :src="item.img_url" alt="" />
               </div>
@@ -64,18 +71,20 @@
         </el-autocomplete>
       </div>
       <el-switch
-        v-model="themeIsDark"
+        :value="theme"
         active-icon-class="el-icon-moon"
         inactive-icon-class="el-icon-sunny"
         active-color="#232b26"
         inactive-color="#5fbdcb"
+        active-value="dark"
+        inactive-value="light"
+        @change="changeTheme"
       >
       </el-switch>
     </nav>
-
+    <!-- 移动端 -->
     <el-drawer
       direction="ltr"
-      title="我是标题"
       :visible.sync="showSlideFlag"
       :wrapperClosable="true"
       :show-close="true"
@@ -84,15 +93,33 @@
     >
       <el-menu default-active="activeIndex" class="el-menu-slide" @select="handleSelect">
         <template v-for="item in nav">
-          <el-menu-item :index="item.id">{{ item.title }}</el-menu-item>
+          <el-menu-item :index="item.id" @click="jumpURL(item.router)">{{
+            item.title
+          }}</el-menu-item>
         </template>
         <el-submenu index="cate2">
           <template slot="title">分类</template>
-          <el-menu-item index="2-1" v-for="cate in categoryList" :key="cate.id">
+          <el-menu-item
+            @click="jumpURL('/?category_id=' + cate.id)"
+            index="2-1"
+            v-for="cate in categoryList"
+            :key="cate.id"
+          >
             {{ cate.name }}
           </el-menu-item>
         </el-submenu>
       </el-menu>
+      <el-switch
+        :value="theme"
+        active-icon-class="el-icon-moon"
+        inactive-icon-class="el-icon-sunny"
+        active-color="#232b26"
+        inactive-color="#5fbdcb"
+        active-value="dark"
+        inactive-value="light"
+        @change="changeTheme"
+      >
+      </el-switch>
     </el-drawer>
     <div class="banner"></div>
   </header>
@@ -105,24 +132,27 @@ export default {
   name: "VHeader",
   props: {},
   data() {
+    // var theme1 = this.$state.state.theme.theme,
     return {
-      themeIsDark: true,
+      // themeIsDark: "light",
       keyword: "",
       navIndex: 0,
       showSlideFlag: false,
       nav: [
         {
           title: "博客",
-          router: "/blog",
+          router: "/",
         },
       ],
     };
   },
+
   computed: {
     ...mapState({
       userInfo: (state) => state.user.userInfo,
       isLoginStatus: (state) => state.user.isLoginStatus,
       categoryList: (state) => state.category.categoryList,
+      theme: (state) => state.theme.theme,
     }),
   },
   watch: {
@@ -131,8 +161,13 @@ export default {
         this.handleNav();
       },
     },
-    themeIsDark: function (newval) {
-      document.body.setAttribute("data-theme", newval ? "dark" : "light");
+    theme: {
+      handler(newval) {
+        if (process.browser) {
+          document.body.setAttribute("data-theme", newval);
+        }
+      },
+      immediate: true,
     },
   },
   mounted() {
@@ -140,6 +175,9 @@ export default {
     this.getCategory();
   },
   methods: {
+    changeTheme(newval) {
+      this.$store.commit("theme/SET_THEME", newval);
+    },
     // 展示侧边栏
     tiggerSlidMenu() {
       this.showSlideFlag = !this.showSlideFlag;
@@ -150,9 +188,9 @@ export default {
     handleSelect() {},
     async querySearchAsync(queryString, cb) {
       if (queryString == "") return;
-      console.log("开始查询");
+      // console.log("开始查询");
       const [err, res] = await getArticleSearch({ keyword: queryString });
-      console.log(err, res);
+      // console.log(err, res);
       if (err) {
         cb([]);
       } else {
@@ -182,24 +220,40 @@ export default {
     // },
     // // 跳转URL
     jumpURL(router) {
-      const { category_id, keyword } = this.$route.query;
-      if (category_id || keyword) {
-        window.location.href = router;
-      } else {
-        this.$router.push(router);
-      }
+      // const { category_id } = this.$route.query;
+      // if (router.indexOf("?") > 0 || !category_id) {
+      //   window.location.href = router;
+      // } else {
+      //   this.$router.push(router);
+      // }
+
+      // if (category_id) {
+      //   window.location.href = router;
+      // } else {
+      //   this.$router.push(router);
+      // }
+      if (this.showSlideFlag) this.showSlideFlag = false;
+      this.$router.push(router);
     },
   },
 };
 </script>
 <style lang="scss">
-.searchlistwarp {
-  width: 300px !important;
+.search {
+  .el-input {
+    input {
+      border-color: rgb(31 123 15);
+      @include background_color("background-color");
+    }
+  }
 }
-.el-dropdown-menu .popper__arrow {
+
+.el-dropdown-menu .popper__arrow,
+.searchlistwarp .popper__arrow {
   @include border_bottom_color("dropdown-background-color");
 }
-.el-dropdown-menu .popper__arrow::after {
+.el-dropdown-menu .popper__arrow::after,
+.searchlistwarp .popper__arrow::after {
   @include border_bottom_color("dropdown-background-color");
 }
 
@@ -212,6 +266,56 @@ export default {
     border: none !important;
   }
 }
+.searchlistwarp {
+  // 搜索列表容器
+  width: 300px !important;
+  @include border_color("background-color");
+  @include background_color("background-color");
+  ul {
+    li {
+      @include background_color("background-color");
+      &:hover {
+        @include background_color("background-color3");
+      }
+    }
+  }
+}
+
+// 抽屉
+.navVWarp {
+  @include background_color("background-color");
+  width: 200px !important;
+  .el-switch {
+    position: fixed;
+    bottom: 0px;
+    margin: auto;
+    width: 200px;
+    text-align: center;
+    display: inline-block;
+    padding: 20px 0;
+    box-sizing: content-box;
+    z-index: 2;
+  }
+  .el-menu-item,
+  .el-submenu {
+    text-align: center;
+    @include background_color("background-color");
+    @include font_color("text-color");
+  }
+  .el-submenu__title {
+    // color: #fff;
+    @include font_color("text-color");
+    &:hover {
+      // background: #333333;
+      @include background_color("background-color3");
+    }
+  }
+  .el-menu-slide {
+    border: none;
+    padding-bottom: 70px;
+    @include background_color("background-color");
+  }
+}
 </style>
 <style scoped lang="scss">
 .header {
@@ -219,7 +323,7 @@ export default {
   z-index: 1000;
   .banner {
     width: 100%;
-    height: 200px;
+    height: 300px;
     background-color: rgb(66, 122, 118);
   }
 }
@@ -282,74 +386,61 @@ export default {
     }
   }
 }
-::v-deep .navVWarp {
-  background: #191919;
-  width: 200px !important;
+.category-links {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
-::v-deep .el-menu-slide {
-  border: none;
-}
-::v-deep .el-menu-item,
-.el-submenu {
-  background: rgba(25, 25, 25);
-  text-align: center;
-  color: #fff;
-}
-::v-deep .el-submenu__title {
-  color: #fff;
-  &:hover {
-    background: #333333;
-  }
-}
+
 .el-switch {
   margin-right: 20px;
 }
-
 .search {
   cursor: pointer;
   margin-right: 50px;
-  .search-list {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+}
+
+.search-list {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  // @include background_color_lighten("background-color");
+  .list-l {
+    width: 20%;
+    line-height: 100%;
+    img {
+      width: 90%;
+    }
+  }
+  .list-r {
+    width: 80%;
     box-sizing: border-box;
-    background-color: #f9f9f9;
-    .list-l {
-      width: 20%;
-      line-height: 100%;
-      img {
-        width: 90%;
+    padding-left: 4px;
+    .list-r-top {
+      padding-top: 5px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .list-r-t {
+        @include font_color("text-color");
+        line-height: 28px;
+        font-size: 16px;
+        padding-right: 10px;
+      }
+      .list-r-d {
+        @include font_color("text-color2");
+        font-size: 14px;
+        line-height: 28px;
       }
     }
-    .list-r {
-      width: 80%;
+    .list-r-bottom {
+      color: #915050;
+      line-height: 30px;
       box-sizing: border-box;
-      padding-left: 4px;
-      .list-r-top {
-        padding-top: 5px;
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        .list-r-t {
-          color: #2d8cf0;
-          line-height: 28px;
-          font-size: 16px;
-          padding-right: 10px;
-        }
-        .list-r-d {
-          color: red;
-          font-size: 14px;
-          line-height: 28px;
-        }
-      }
-      .list-r-bottom {
-        color: #333;
-        line-height: 30px;
-        box-sizing: border-box;
-        padding-bottom: 5px;
-      }
+      padding-bottom: 5px;
     }
   }
 }

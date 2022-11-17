@@ -6,11 +6,13 @@ const ratelimit = require('koa-ratelimit');
 
 require('module-alias/register') //别名注册
 
-
-
 const app = new Koa();
+// app.use(cors({
+//   "origin":"*",
+// }))
 app.use(cors())
 app.use(parser())
+
 // const Router = require('koa-router'); // 引入koa-router
 // const requireDirectory = require('require-directory')
 

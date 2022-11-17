@@ -1,14 +1,15 @@
+import Cookies from 'js-cookie'
 
 const state = () => ({
-  theme: 'dark',
+  theme: 'light',
 })
 
 const mutations = {
   SET_THEME(state, data) {
-    console.log('SET_THEME-SET_THEME')
-    if(process.client){
-      document.body.setAttribute("data-theme", data);
-    }
+    // if(process.client){
+    // }
+    console.log('SET_THEME',data)
+    Cookies.set('blogTheme', data)
     state.theme = data
   },
 }

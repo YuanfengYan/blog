@@ -326,52 +326,32 @@ class ArticleDao {
           }
         }
       })
-      console.log('article1',article)
       
       article.forEach(item=>{
-        item.dataValues.mm = item.dataValues.mm.match(new RegExp('([\\s|\\n|\\r|\\b|^\\S]\\S*)'+keyword+'([\\S|\\s]{0,15})'))[0]
+        // ex : /(([\s|^\S]\S*)node|^node)([\S|\s]{0,15})/  匹配node开头 或者 node前紧接着非空字符串。后面0到15个是字符串
+        let matchArr = item.dataValues.mm.match(new RegExp('(([\\s|^\\S]\\S*)'+keyword+'|^'+keyword+')([\\S|\\s]{0,15})'))
+        item.dataValues.mm = matchArr?matchArr[0]:''
       })
-      console.log('article2',article)
-      // let filter = {
-      //   id,
-      //   deleted_at: null
-      // }
-
-      // let article = await Article.findOne({
-      //   where: filter,
-      // });
-
-      // const [categoryError, dataAndCategory] = await ArticleDao._handleCategory(article, article.category_id)
-      // if (!categoryError) {
-      //   article = dataAndCategory
-      // }
-
-      // // 处理创建人
-      // const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(article, article.admin_id)
-      // if (!userError) {
-      //   article = dataAndAdmin
-      // }
-
-
-      // if (!article) {
-      //   throw new global.errs.NotFound('没有找到相关文章');
-      // }
-
-      // const comment = await Comment.findAndCountAll({
-      //   where: {
-      //     article_id: id,
-      //     status: 1,
-      //     deleted_at: null
-      //   },
-      //   attributes: ['id']
-      // })
-
-      // if (comment) {
-      //   article.setDataValue('comment_count', comment.count || 0)
-      // }
 
       return [null, article];
     } catch (err) {
+
+      console.log('err11',err)
+      return [err, null]
+    }
+  }
+  // 基本信息
+  static async baseInfo(query={}) {
+    
+    try {
+      let info = {
+        count:await Article.count()
+      }
+
+      return [null, info];
+    } catch (err) {
+
+      console.log('err11',err)
       return [err, null]
     }
   }

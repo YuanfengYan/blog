@@ -1,7 +1,6 @@
 const dotenv = require('dotenv')
 const envConfig = dotenv.config({ path: `.env.${process.env.NODE_ENV}` }).parsed
 
-console.log('envConfig',envConfig)
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -9,9 +8,7 @@ export default {
     htmlAttrs: {
       lang: 'en',
     },
-    bodyAttrs:{
-      "data-theme":'dark'
-    },
+    script:[{src:'https://hm.baidu.com/hm.js?225dda0a0f1768d18983f6a9de266e2b'}],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
