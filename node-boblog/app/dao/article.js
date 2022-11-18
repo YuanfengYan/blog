@@ -123,7 +123,7 @@ class ArticleDao {
 
   // 获取文章列表
   static async list(params = {}) {
-    const { category_id, keyword, page_size = 3, status, page = 1 } = params;
+    const { category_id, keyword, page_size = 10, status, page = 1 } = params;
 
     // 筛选方式
     let filter = {

@@ -158,6 +158,7 @@ export default {
      * 显示目录
      */
     showTitles() {
+      this.titles = [];
       let self = this;
       let content = this.$refs.markdownwarp.$el;
       // 提取h2标签
@@ -179,6 +180,9 @@ export default {
       });
       if (!err) {
         this.article = res.data.data;
+        this.$nextTick(() => {
+          this.showTitles();
+        });
       }
     },
     // 回到顶部
@@ -238,7 +242,7 @@ export default {
 }
 
 .title {
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 600;
   @include font_color("text-color");
   line-height: 42px;
