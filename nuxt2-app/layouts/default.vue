@@ -31,7 +31,11 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background: #fff;
+  background-image: url("../assets/images/loadding.gif");
+  background-size: contain;
+  background-position: center;
+  backgtound-repeat: no-repeat;
+
   z-index: 2000;
 }
 </style>

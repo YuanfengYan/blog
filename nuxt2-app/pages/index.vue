@@ -54,15 +54,19 @@
         <el-divider content-position="left">分类</el-divider>
         <div class="categoryWarp">
           <template v-if="Array.isArray(categoryList) && categoryList.length">
-            <div class="categoryItem" @click="changeCategory()">全部</div>
             <div
-              class="categoryItem"
-              v-for="item in categoryList"
+              :class="['categoryItem', !categoryId ? 'active' : '']"
+              @click="changeCategory()"
+            >
+              全部
+            </div>
+            <div
+              v-for="(item, index) in categoryList"
+              :class="['categoryItem', categoryId == item.id ? 'active' : '']"
               :key="item.id"
               @click="changeCategory(item.id)"
               :style="{
-                backgroundColor:
-                  cateColors[Math.floor(Math.random() * cateColors.length)],
+                backgroundColor: cateColors[index % cateColors.length],
               }"
             >
               {{ item.name }}
@@ -99,10 +103,11 @@ export default {
   data() {
     return {
       cateColors: [
-        "rgb(225, 91, 100)",
+        "#5289b9",
         "rgb(132, 155, 135)",
         "rgb(103, 204, 134)",
         "rgb(248, 178, 106)",
+        "#009688",
       ],
       isFetching: false, //接口防抖
       allArticles: "",
@@ -117,6 +122,7 @@ export default {
       page,
       // is_admin: 1,
     });
+    console.log("article---", [err, res]);
     if (!err) {
       const isLoad = res.data.data.meta.total_pages > page;
       return {
@@ -301,9 +307,9 @@ span.el-radio__input {
     .categoryItem {
       display: inline-block;
       margin: 4px;
-      background: #e15b64;
+      background: #ff0000;
       vertical-align: middle;
-      margin: 4px 4px 10px;
+      margin: 4px 8px 10px;
       padding: 4px 8px;
       display: inline-block;
       cursor: pointer;
@@ -311,6 +317,13 @@ span.el-radio__input {
       color: #fff;
       line-height: 13px;
       font-size: 13px;
+      opcity: 0.7;
+      &.active {
+        background: red;
+        transform: scale(1.3);
+        /* font-size: 16px ; */
+        opacity: 1;
+      }
       // @for $i from 1 through 30 {
       //   &:nth-child(#{$i}) {
       //     background: nth($cateColor, random(length($cateColor)));
