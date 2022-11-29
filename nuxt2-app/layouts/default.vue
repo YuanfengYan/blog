@@ -32,9 +32,9 @@ export default {
   top: 0;
   left: 0;
   background-image: url("../assets/images/loadding.gif");
-  background-size: contain;
+  background-size: cover;
   background-position: center;
-  backgtound-repeat: no-repeat;
+  background-repeat: no-repeat;
 
   z-index: 2000;
 }

@@ -3,7 +3,9 @@
     <div class="comment">
       <div class="comment-from">
         <div class="comment-avatar">
-          <Avatar :str="new Date().getTime() + ''"></Avatar>
+          <Avatar
+            :str="(userInfo && userInfo.username) || new Date().getTime() + ''"
+          ></Avatar>
         </div>
         <div class="comment-textarea">
           <textarea
@@ -32,7 +34,8 @@
       <ul v-if="Array.isArray(commentList) && commentList.length" class="comment-list">
         <li v-for="(item, index) in commentList" :key="item.id" class="comment-item">
           <div class="comment-item-avatar">
-            <img src="https://cdn.boblog.com/avatar.png" alt="avatar" />
+            <!-- <img src="https://cdn.boblog.com/avatar.png" alt="avatar" /> -->
+            <Avatar :str="item.user_info.username"></Avatar>
           </div>
           <div class="comment-item-detail">
             <div class="comment-item-user">
@@ -137,9 +140,9 @@ export default {
     userId() {
       return (this.userInfo && this.userInfo.id) || 0;
     },
-    commentEmail() {
-      return (this.userInfo && this.userInfo.email) || "";
-    },
+    // commentEmail() {
+    //   return (this.userInfo && this.userInfo.email) || "";
+    // },
   },
   mounted() {
     this.getComment();

@@ -94,7 +94,7 @@ export default {
     return {
       title: article.title,
       meta: [
-        { name: "keywords", content: article.seo_keyword + ",Mr.Yan,blog,博客" },
+        { name: "keywords", content: article.seo_keyword + ",Mr.Yan,yanyuanfeng" },
         { name: "description", content: article.description },
       ],
     };

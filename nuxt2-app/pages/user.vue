@@ -55,16 +55,15 @@ export default {
   },
   head() {
     return {
-      title: `${this.userInfo.username} - 个人中心  - boblog.com`,
+      title: "Mr.Yan的博客",
       meta: [
         {
           name: "keywords",
-          content:
-            "波波,博客,波波博客,yanyuanfeng,bo,blog,boblog,前端开发工程师,前端性能优化,JavaScript,css,html",
+          content: "Mr.Yan,blog,JavaScript,前端",
         },
         {
           name: "description",
-          content: "波波博客 - BoBlog.com，专注于前端开发技术，前端性能优化！",
+          content: "Mr.Yan的技术博客",
         },
       ],
     };

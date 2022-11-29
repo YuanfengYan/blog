@@ -52,7 +52,13 @@
           @select="handleSelect"
           highlight-first-item
           popper-class="searchlistwarp"
-          ><template slot-scope="{ item }">
+        >
+          <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
+            <el-option label="餐厅名" value="1"></el-option>
+            <el-option label="订单号" value="2"></el-option>
+            <el-option label="用户电话" value="3"></el-option>
+          </el-select> -->
+          <template slot-scope="{ item }">
             <div class="search-list" @click="jumpURL('/article?id=' + item.id)">
               <div class="list-l">
                 <img :src="item.img_url" alt="" />
@@ -63,7 +69,7 @@
                   <p class="list-r-d">{{ item.description }}</p>
                 </div>
                 <div class="list-r-bottom">
-                  <p>{{ item.mm }}</p>
+                  {{ item.mm }}
                 </div>
               </div>
             </div>
@@ -121,7 +127,12 @@
       >
       </el-switch>
     </el-drawer>
-    <div class="banner"></div>
+    <div
+      class="banner"
+      :style="{
+        backgroundImage: 'url(' + bannerUrl + ')',
+      }"
+    ></div>
   </header>
 </template>
 
@@ -134,10 +145,24 @@ export default {
   data() {
     // var theme1 = this.$state.state.theme.theme,
     return {
+      select: "",
       // themeIsDark: "light",
       keyword: "",
       navIndex: 0,
       showSlideFlag: false,
+      bannerUrl: "https://qiniu.kananana.cn/bing/bing1.jpg",
+      bannerList: [
+        "https://qiniu.kananana.cn/bing/bing1.jpg",
+        "https://qiniu.kananana.cn/bing/bing2.jpg",
+        "https://qiniu.kananana.cn/bing/bing3.jpg",
+        "https://qiniu.kananana.cn/bing/bing4.jpg",
+        "https://qiniu.kananana.cn/bing/bing5.jpg",
+        "https://qiniu.kananana.cn/bing/bing6.jpg",
+        "https://qiniu.kananana.cn/bing/bing7.jpg",
+        "https://qiniu.kananana.cn/bing/bing8.jpg",
+        "https://qiniu.kananana.cn/bing/bing9.jpg",
+        "https://qiniu.kananana.cn/bing/bing10.jpg",
+      ],
       nav: [
         {
           title: "博客",
@@ -169,12 +194,26 @@ export default {
       },
       immediate: true,
     },
+    // 监听路由是否变化
+    $route(to, from) {
+      this.initBanner(to);
+      // console.log(to.path, to);
+      // this.bannerUrl = this.bannerList[Math.floor(Math.random() * 5)];
+    },
   },
   mounted() {
     this.handleNav();
     this.getCategory();
+    this.initBanner(this.$route);
   },
   methods: {
+    initBanner(to) {
+      if (to.path == "/") {
+        this.bannerUrl = this.bannerList[0];
+      } else if (to.query.id) {
+        this.bannerUrl = this.bannerList[to.query.id % this.bannerList.length];
+      }
+    },
     changeTheme(newval) {
       this.$store.commit("theme/SET_THEME", newval);
     },
@@ -242,7 +281,7 @@ export default {
 .search {
   .el-input {
     input {
-      border-color: rgb(31 123 15);
+      border-color: rgb(31 123 15) !important;
       @include background_color("background-color");
     }
   }
@@ -323,8 +362,10 @@ export default {
   z-index: 1000;
   .banner {
     width: 100%;
-    height: 300px;
-    background-color: rgb(66, 122, 118);
+    height: 400px;
+    // background-color: rgb(66, 122, 118);
+    background-size: cover;
+    background-position: center;
   }
 }
 //
@@ -434,6 +475,8 @@ export default {
         @include font_color("text-color2");
         font-size: 14px;
         line-height: 28px;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     .list-r-bottom {
@@ -441,6 +484,9 @@ export default {
       line-height: 30px;
       box-sizing: border-box;
       padding-bottom: 5px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 100%;
     }
   }
 }

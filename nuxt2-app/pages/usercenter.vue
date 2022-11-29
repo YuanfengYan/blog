@@ -8,17 +8,14 @@
       </p>
       <el-button @click="logout"> 退出登录 </el-button>
 
-      <div
-        v-if="Array.isArray(commentList) && commentList.length > 0"
-        class="comment"
-      >
+      <div v-if="Array.isArray(commentList) && commentList.length > 0" class="comment">
         <h2>评论列表：</h2>
         <ul class="comment-list">
           <li v-for="item in commentList" :key="item.id" class="comment-item">
             <p>文章：{{ item.article.title }}</p>
             <p>评论内容：{{ item.content }}</p>
             <p>评论时间：{{ item.created_at }}</p>
-            <p>回复：{{ item.reply_list || '无' }}</p>
+            <p>回复：{{ item.reply_list || "无" }}</p>
           </li>
         </ul>
         <div class="pagination">
@@ -36,18 +33,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { getCommentTarget } from '@/request/api/comment'
-import { removeToken } from '@/lib/auth'
+import { mapState } from "vuex";
+import { getCommentTarget } from "@/request/api/comment";
+import { removeToken } from "@/lib/auth";
 
 export default {
-  name: 'UserCenter',
+  name: "UserCenter",
   data() {
     return {
       page: 1,
       count: 0,
       commentList: [],
-    }
+    };
   },
   computed: {
     ...mapState({
@@ -55,59 +52,56 @@ export default {
     }),
   },
   async fetch({ store }) {
-    await store.dispatch('category/getCategoryData')
+    await store.dispatch("category/getCategoryData");
   },
   head() {
     return {
-      title: `${
-        this.userInfo && this.userInfo.username
-      } - 个人中心  - boblog.com`,
+      title: "Mr.Yan的博客",
       meta: [
         {
-          name: 'keywords',
-          content:
-            '波波,博客,波波博客,yanyuanfeng,bo,blog,boblog,前端开发工程师,前端性能优化,JavaScript,css,html',
+          name: "keywords",
+          content: "Mr.Yan,blog,JavaScript,前端",
         },
         {
-          name: 'description',
-          content: '波波博客 - BoBlog.com，专注于前端开发技术，前端性能优化！',
+          name: "description",
+          content: "Mr.Yan的技术博客",
         },
       ],
-    }
+    };
   },
   mounted() {
-    this.getComment()
+    this.getComment();
   },
   methods: {
     // 退出登录
     logout() {
-      removeToken()
-      this.$store.commit('user/SET_LOGIN_STATUS', false)
-      this.$store.commit('user/SET_USERINFO', null)
-      this.$router.push('/')
+      removeToken();
+      this.$store.commit("user/SET_LOGIN_STATUS", false);
+      this.$store.commit("user/SET_USERINFO", null);
+      this.$router.push("/");
     },
     async getComment() {
-      const uid = this.userInfo && this.userInfo.id
+      const uid = this.userInfo && this.userInfo.id;
       const [err, res] = await getCommentTarget({
         user_id: uid,
         is_replay: 1,
         is_article: 1,
         page: this.page,
-      })
+      });
       if (!err) {
-        this.isLoad = true
-        this.commentList = res.data.data.data
-        this.count = res.data.data.meta.count
+        this.isLoad = true;
+        this.commentList = res.data.data.data;
+        this.count = res.data.data.meta.count;
       }
     },
     // 点击数字
     async handleCurrentChange(page) {
-      this.page = page
-      await this.getComment()
-      this.$scrollTo(0)
+      this.page = page;
+      await this.getComment();
+      this.$scrollTo(0);
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
