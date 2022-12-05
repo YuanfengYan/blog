@@ -19,14 +19,18 @@
         <div class="slide-icon">
           <i
             :class="['el-icon-tickets', showArticleNav ? 'active' : '']"
-            @click="showNav"
+            @click.stop="showNav"
           ></i>
         </div>
         <div class="slide-icon">
           <i class="el-icon-top" @click="scrollTop"></i>
         </div>
-        <ul :class="['articleNav', showArticleNav ? 'active' : '']">
-          <li v-for="item in titles" class="navItem" @click="gonav(item.id)">
+        <ul :class="['articleNav', showArticleNav ? 'active' : '']" @click.stop="">
+          <li
+            v-for="item in titles"
+            :class="['navItem', item.type]"
+            @click="gonav(item.id)"
+          >
             {{ item.content }}
           </li>
         </ul>
@@ -125,9 +129,15 @@ export default {
       this.creatCopyBtn();
       this.copy();
       this.showTitles();
+      this.bodyclick();
     },
     showNav() {
       this.showArticleNav = !this.showArticleNav;
+    },
+    bodyclick() {
+      document.body.addEventListener("click", () => {
+        this.showArticleNav = false;
+      });
     },
     /**
      * 目录跳转
@@ -135,7 +145,7 @@ export default {
     gonav(id) {
       document.getElementById(id).scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "start",
       });
     },
     getcontent(h) {
@@ -162,13 +172,22 @@ export default {
       let self = this;
       let content = this.$refs.markdownwarp.$el;
       // 提取h2标签
+      let h3dom = content.querySelectorAll("h3");
       let h2dom = content.querySelectorAll("h2");
+      let domlist = [].concat(...h2dom, ...h3dom);
+      domlist.sort((a, b) => {
+        return (
+          a.attributes["data-v-md-line"].value - b.attributes["data-v-md-line"].value
+        );
+      });
+
       let each = [].forEach;
-      each.call(h2dom, (h) => {
+      each.call(domlist, (h) => {
         let id = h.getAttribute("data-v-md-line");
         h.setAttribute("id", id);
         this.titles.push({
           id,
+          type: h.nodeName, //H2,H3
           content: this.getcontent(h),
         });
       });
@@ -316,6 +335,9 @@ export default {
         left: 0;
         background: #3eaf7c;
         top: 10px;
+      }
+      &.H3 {
+        margin-left: 20px;
       }
     }
   }
