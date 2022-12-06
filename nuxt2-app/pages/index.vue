@@ -91,7 +91,7 @@ export default {
       meta: [
         {
           name: "keywords",
-          content: "Mr.Yan,blog,JavaScript,前端",
+          content: "Mr.Yan,blog,JavaScript,前端,yanyuanfeng",
         },
         {
           name: "description",

@@ -67,6 +67,8 @@ export default {
       return {
         article: res.data.data,
       };
+    } else {
+      context.redirect("/noarticle"); //没找到文章
     }
   },
   data() {
@@ -81,7 +83,7 @@ export default {
     // 监听路由是否变化
     $route(to, from) {
       if (to.params.id != from.params.id) {
-        console.log("params", to.params.id);
+        // console.log("params", to.params.id);
         this.getArticleDetail2(to.params.id);
         this.reWrite = false;
         this.$nextTick(() => {
@@ -133,6 +135,9 @@ export default {
     },
     showNav() {
       this.showArticleNav = !this.showArticleNav;
+    },
+    goErrorPage() {
+      this.$router.push("/notfound");
     },
     bodyclick() {
       document.body.addEventListener("click", () => {
@@ -210,7 +215,7 @@ export default {
     },
     // 点击展开评论
     onLoadEnd() {
-      console.log("wwww");
+      // console.log("wwww");
       // this.$nextTick(() => {
       //   this.progress.calculateWidthPrecent();
       // });

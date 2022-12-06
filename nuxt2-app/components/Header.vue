@@ -151,6 +151,7 @@ export default {
       navIndex: 0,
       showSlideFlag: false,
       bannerUrl: "https://qiniu.kananana.cn/bing/bing1.jpg",
+      notfoundUrl: "https://qiniu.kananana.cn/other/404-3.png",
       bannerList: [
         "https://qiniu.kananana.cn/bing/bing1.jpg",
         "https://qiniu.kananana.cn/bing/bing2.jpg",
@@ -211,6 +212,8 @@ export default {
       console.log(to, "tooooo");
       if (to.path == "/") {
         this.bannerUrl = this.bannerList[0];
+      } else if (to.path === "/noarticle") {
+        this.bannerUrl = this.notfoundUrl;
       } else if (to.params.id) {
         this.bannerUrl = this.bannerList[to.params.id % this.bannerList.length];
       }
