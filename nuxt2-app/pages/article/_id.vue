@@ -56,13 +56,13 @@ export default {
     VueLazyComponent,
   },
   async asyncData(context) {
-    const { id } = context.query;
+    // console.log(context, "context");
+    const { id } = context.params;
     const params = {
       id,
       is_markdown: false,
     };
     const [err, res] = await getArticleDetail(params);
-    // console.log([res]);
     if (!err) {
       return {
         article: res.data.data,
@@ -80,9 +80,9 @@ export default {
   watch: {
     // 监听路由是否变化
     $route(to, from) {
-      if (to.query.id != from.query.id) {
-        console.log("query", to.query.id);
-        this.getArticleDetail2(to.query.id);
+      if (to.params.id != from.params.id) {
+        console.log("params", to.params.id);
+        this.getArticleDetail2(to.params.id);
         this.reWrite = false;
         this.$nextTick(() => {
           this.reWrite = true;

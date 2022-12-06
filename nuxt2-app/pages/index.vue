@@ -114,7 +114,7 @@ export default {
     };
   },
   async asyncData({ query }) {
-    const { id, keyword, category_id, page = 1 } = query;
+    const { keyword, category_id, page = 1 } = query;
     const [err, res] = await getArticleList({
       // id,
       category_id,
@@ -200,7 +200,7 @@ export default {
       }
     },
     jumpURL(item) {
-      this.$router.push("/article?id=" + item.id);
+      this.$router.push("/article/" + item.id);
     },
     // 页面滑到底部需要调用的方法
     handleScroll() {

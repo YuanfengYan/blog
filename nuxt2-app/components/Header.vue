@@ -59,7 +59,7 @@
             <el-option label="用户电话" value="3"></el-option>
           </el-select> -->
           <template slot-scope="{ item }">
-            <div class="search-list" @click="jumpURL('/article?id=' + item.id)">
+            <div class="search-list" @click="jumpURL('/article/' + item.id)">
               <div class="list-l">
                 <img :src="item.img_url" alt="" />
               </div>
@@ -208,10 +208,11 @@ export default {
   },
   methods: {
     initBanner(to) {
+      console.log(to, "tooooo");
       if (to.path == "/") {
         this.bannerUrl = this.bannerList[0];
-      } else if (to.query.id) {
-        this.bannerUrl = this.bannerList[to.query.id % this.bannerList.length];
+      } else if (to.params.id) {
+        this.bannerUrl = this.bannerList[to.params.id % this.bannerList.length];
       }
     },
     changeTheme(newval) {
