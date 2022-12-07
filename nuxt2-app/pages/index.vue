@@ -34,7 +34,7 @@
     </div>
     <div class="info-wrapper">
       <div class="personal-info-wrapper">
-        <h2>Yan's Blog</h2>
+        <h2>Mr.Yan Blog</h2>
         <div class="num">
           <div>
             <h3>{{ article.meta.count }}</h3>
@@ -47,7 +47,9 @@
         </div>
         <ul class="links">
           <li>
-            <img src="@/assets/images/github.png" />
+            <a href="https://github.com/YuanfengYan" target="blank">
+              <img src="@/assets/images/github.png" />
+            </a>
           </li>
         </ul>
         <!-- <hr ></hr> -->
@@ -73,6 +75,12 @@
             </div>
           </template>
         </div>
+        <el-divider content-position="left">友情链接</el-divider>
+        <ul class="friend">
+          <li class="friendlink">
+            <a href="#">友情链接</a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -122,7 +130,7 @@ export default {
       page,
       // is_admin: 1,
     });
-    console.log("article---", [err, res]);
+    // console.log("article---", [err, res]);
     if (!err) {
       const isLoad = res.data.data.meta.total_pages > page;
       return {
@@ -157,7 +165,7 @@ export default {
     initData() {
       this.getCategory();
       getArticleBaseInfo().then(([err, res]) => {
-        console.log("getArticleBaseInfo", res);
+        // console.log("getArticleBaseInfo", res);
         if (!err) {
           this.allArticles = res.data.data.count;
         }
@@ -329,6 +337,24 @@ span.el-radio__input {
       //     background: nth($cateColor, random(length($cateColor)));
       //   }
       // }
+    }
+  }
+  .friend {
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    .friendlink {
+      margin-right: 20px;
+      a {
+        line-height: 30px;
+        display: block;
+        color: #6dd189;
+        font-size: 16px;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
   }
 }
