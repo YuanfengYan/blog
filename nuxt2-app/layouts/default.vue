@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="loadWarp" v-if="!loadFlag"></div>
+    <!-- <div class="loadWarp" v-if="!loadFlag"></div> -->
     <Header />
     <Nuxt />
     <Footer />
@@ -20,7 +20,7 @@ export default {
     };
   },
   mounted() {
-    this.loadFlag = true;
+    // this.loadFlag = true;
   },
 };
 </script>
@@ -31,7 +31,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background-image: url("../assets/images/loadding.gif");
+  // background-image: url("../assets/images/loadding.gif");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

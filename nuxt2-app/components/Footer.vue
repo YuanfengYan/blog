@@ -1,12 +1,12 @@
 <template>
   <div class="footer">
     <div class="site">
-      <span>© Mr.Yan博客 - kananana.cn</span>
+      <!-- <span>© Mr.Yan学习笔记 </span> -->
     </div>
     <div class="copyright">
-      <a class="copyright-link" href="https://beian.miit.gov.cn" target="_blank">
+      <!-- <a class="copyright-link" href="https://beian.miit.gov.cn" target="_blank">
         浙ICP备2022031961号-1
-      </a>
+      </a> -->
     </div>
   </div>
 </template>

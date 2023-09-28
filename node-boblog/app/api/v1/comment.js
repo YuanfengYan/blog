@@ -19,7 +19,7 @@ router.post('/comment', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new CommentValidator().validate(ctx);
   const [err, data] = await CommentDao.create(v);
-  // console.log('创建评论',data,err)
+  console.log('创建评论',data,err)
   if (!err) {
     const resData = {
       id: data.id,

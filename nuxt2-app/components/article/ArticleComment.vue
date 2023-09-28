@@ -184,9 +184,10 @@ export default {
         this.$message.warning("请填写评论内容!");
         return false;
       }
+      console.log(this.$route, " this.$route");
       const [err] = await createComment({
         user_id: this.userId,
-        article_id: this.$route.query.id,
+        article_id: this.$route.params.id,
         email: this.commentEmail,
         content: this.commentContent,
       });

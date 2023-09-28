@@ -11,7 +11,7 @@ export default {
   layout: "activity",
   head() {
     return {
-      title: "Mr.Yan的博客",
+      title: "前端杂货铺",
       meta: [
         {
           name: "keywords",

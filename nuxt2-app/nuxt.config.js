@@ -4,7 +4,7 @@ const envConfig = dotenv.config({ path: `.env.${process.env.NODE_ENV}` }).parsed
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'nuxt2-app',
+    title: '前端杂货铺',
     htmlAttrs: {
       lang: 'en',
     },
@@ -19,6 +19,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  loading:'~/components/loading/loading.vue',
   env:{
     baseUrl:process.env.BASE_URL || 'http://localhost:5000'
   },

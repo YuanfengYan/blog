@@ -37,7 +37,7 @@
         <h2>Mr.Yan Blog</h2>
         <div class="num">
           <div>
-            <h3>{{ article.meta.count }}</h3>
+            <!-- <h3>{{ article.meta.count }}</h3> -->
             <h6>cur articles</h6>
           </div>
           <div>
@@ -95,7 +95,7 @@ export default {
   name: "BlogIndex",
   head() {
     return {
-      title: "Mr.Yan的博客",
+      title: "前端杂货铺",
       meta: [
         {
           name: "keywords",
@@ -103,7 +103,7 @@ export default {
         },
         {
           name: "description",
-          content: "Mr.Yan的技术博客",
+          content: "前端杂货铺",
         },
       ],
     };
