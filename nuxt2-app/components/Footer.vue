@@ -1,12 +1,12 @@
 <template>
   <div class="footer">
     <div class="site">
-      <!-- <span>© Mr.Yan学习笔记 </span> -->
+      <span>© 前端杂货铺 </span>
     </div>
     <div class="copyright">
-      <!-- <a class="copyright-link" href="https://beian.miit.gov.cn" target="_blank">
-        浙ICP备2022031961号-1
-      </a> -->
+      <a class="copyright-link" href="https://beian.miit.gov.cn" target="_blank">
+        浙ICP备2022031961号-2
+      </a>
     </div>
   </div>
 </template>

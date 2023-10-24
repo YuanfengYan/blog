@@ -1,7 +1,7 @@
 <template>
   <div class="form-list">
     <div class="logo">
-      <img src="https://qiniu.kananana.cn/logo.png" alt="logo" />
+      <img src="https://img.yanyuanfeng.top/logo.png" alt="logo" />
     </div>
     <div v-if="!isLogin" class="form-item">
       <input

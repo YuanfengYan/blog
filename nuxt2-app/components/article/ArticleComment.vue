@@ -213,8 +213,9 @@ export default {
     },
     // 获取评论数据
     async getComment() {
+      console.log("this.$route.params.id", this.$route.params.id);
       const [err, res] = await getCommentTarget({
-        article_id: this.$route.query.id,
+        article_id: this.$route.params.id,
         is_replay: 1,
         is_user: 1,
         status: 1,

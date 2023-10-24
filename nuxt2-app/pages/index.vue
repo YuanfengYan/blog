@@ -37,7 +37,7 @@
         <h2>Mr.Yan Blog</h2>
         <div class="num">
           <div>
-            <!-- <h3>{{ article.meta.count }}</h3> -->
+            <h3>{{ article.meta.count }}</h3>
             <h6>cur articles</h6>
           </div>
           <div>
