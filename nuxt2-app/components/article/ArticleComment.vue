@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="warp">
     <div class="comment">
       <div class="comment-from">
         <div class="comment-avatar">
@@ -247,11 +247,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.warp {
+  width: 80%;
+  margin: 0 auto;
+}
 .comment {
   box-sizing: border-box;
   padding: 80px 0 120px;
-  width: 80%;
-  margin: 0 auto;
 
   &-list {
     margin: 0;
