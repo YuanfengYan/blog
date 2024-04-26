@@ -252,6 +252,7 @@ span.el-radio__input {
 }
 
 .info-wrapper {
+  position: sticky;
   flex-basis: 400px;
   margin-left: 15px;
   transition: all 0.3s;
