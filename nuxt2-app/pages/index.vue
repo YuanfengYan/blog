@@ -58,7 +58,7 @@
           <template v-if="Array.isArray(categoryList) && categoryList.length">
             <div
               :class="['categoryItem', !categoryId ? 'active' : '']"
-              @click="changeCategory()"
+              @click="changeCategoryid()"
             >
               全部
             </div>
@@ -66,7 +66,7 @@
               v-for="(item, index) in categoryList"
               :class="['categoryItem', categoryId == item.id ? 'active' : '']"
               :key="item.id"
-              @click="changeCategory(item.id)"
+              @click="changeCategoryid(item.id)"
               :style="{
                 backgroundColor: cateColors[index % cateColors.length],
               }"
@@ -175,6 +175,9 @@ export default {
     // 获取分类
     getCategory() {
       this.$store.dispatch("category/getCategoryData");
+    },
+    changeCategoryid(id=''){
+      this.$router.replace("/?category_id="+id);
     },
     // 改变分类
     async changeCategory(id) {
