@@ -139,6 +139,16 @@
 <script>
 import { mapState } from "vuex";
 import { getArticleSearch } from "@/request/api/article";
+import img1 from "./images/bing1.jpg"
+import img2 from "./images/bing2.jpg"
+import img3 from "./images/bing3.jpg"
+import img4 from "./images/bing4.jpg"
+import img5 from "./images/bing5.jpg"
+import img6 from "./images/bing6.jpg"
+import img7 from "./images/bing7.jpg"
+import img8 from "./images/bing8.jpg"
+import img9 from "./images/bing9.jpg"
+import img10 from "./images/bing10.jpg"
 export default {
   name: "VHeader",
   props: {},
@@ -150,19 +160,19 @@ export default {
       keyword: "",
       navIndex: 0,
       showSlideFlag: false,
-      bannerUrl: "https://img.yanyuanfeng.top/bing/bing1.jpg",
+      bannerUrl: img1,
       notfoundUrl: "https://img.yanyuanfeng.top/other/404-3.png",
       bannerList: [
-        "https://img.yanyuanfeng.top/bing/bing1.jpg",
-        "https://img.yanyuanfeng.top/bing/bing2.jpg",
-        "https://img.yanyuanfeng.top/bing/bing3.jpg",
-        "https://img.yanyuanfeng.top/bing/bing4.jpg",
-        "https://img.yanyuanfeng.top/bing/bing5.jpg",
-        "https://img.yanyuanfeng.top/bing/bing6.jpg",
-        "https://img.yanyuanfeng.top/bing/bing7.jpg",
-        "https://img.yanyuanfeng.top/bing/bing8.jpg",
-        "https://img.yanyuanfeng.top/bing/bing9.jpg",
-        "https://img.yanyuanfeng.top/bing/bing10.jpg",
+        img1,
+        img2,
+        img3,
+        img4,
+        img5,
+        img6,
+        img7,
+        img8,
+        img9,
+        img10,
       ],
       nav: [
         {
